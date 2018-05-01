@@ -1,9 +1,9 @@
 /**
  * Assigment 2 - main server
  */
-/*test comment - Burhan
-
-/*test comment -Burhan
+/*update comment
+ * 
+ */
 const express = require('express')
 var path = require('path')
 var bodyParser = require('body-parser');
