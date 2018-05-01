@@ -16,28 +16,24 @@ const app = express();
 
 /* variables here 
 * 
-* server.locacls.<variableName> = <VariableValue>;
-* server.locacls.<variableName2> = <VariableValue>;
+* app.locacls.<variableName> = <VariableValue>;
+* app.locacls.<variableName2> = <VariableValue>;
 *
 */
 
+// This is a method used to set environment variables that Express will use in its configuration
 app.set('views', path.join(__dirname, 'app/views'));
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+
+// code to maintain a user session
 app.use(session({secret: 'ssshhhh', cookie:{maxAge:600000}, resave: true, saveUninitialized: true}));
 app.use('/', serversession);
 
-//route methods moved to server.routes
-//app.get('/', function(req,res){
-//	res.render('survey.ejs',{products:products})
-//});
-//app.post('/survey', function(req,res){
-//	console.log(req.body);
-//
-//	res.render('surveyresult.ejs', {products: products, surveyresults: surveyresults})
-//});
-
+// Start the server on port 3000
 app.listen(3000, function () {
   console.log('survey app listening on port 3000!')
 })

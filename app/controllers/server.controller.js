@@ -1,9 +1,11 @@
 var express = require('express');
 
 module.exports.showForm = function(req, res){
-	console.log("show form function");
+	res.render('test.ejs');
 };
 
 module.exports.submit = function(req, res){
-	console.log("submit function");
+	res.render('test2.ejs');
+	//	res.render('<ejs or pug page>', {data in JSON format})
+	//console.log("submit function");
 };
