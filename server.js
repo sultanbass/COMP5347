@@ -2,20 +2,19 @@
  * Assigment 2 - main server
  */
 /*update comment
- * 
+ *
  */
 const mongoose = require('mongoose')
 const express = require('express')
 var path = require('path')
 var bodyParser = require('body-parser');
 var session = require('express-session');
-
 var serversession = require('./app/routes/server.routes');
 
 const app = express();
 
-/* variables here 
-* 
+/* variables here
+*
 * app.locacls.<variableName> = <VariableValue>;
 * app.locacls.<variableName2> = <VariableValue>;
 *
@@ -32,6 +31,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // code to maintain a user session
 app.use(session({secret: 'ssshhhh', cookie:{maxAge:600000}, resave: true, saveUninitialized: true}));
 app.use('/', serversession);
+
+
+//Connect ot mongodb
+mongoose.connect('mongodb://localhost/COMP5347');
 
 // Start the server on port 3000
 app.listen(3000, function () {
