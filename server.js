@@ -8,7 +8,7 @@ var path = require('path')
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var serversession = require('./app/routes/server.routes');
-
+var register = require('./app/routes/users');
 const app = express();
 
 // This is a method used to set environment variables that Express will use in its configuration
@@ -27,6 +27,8 @@ app.use(passport.session());
 
 // code to maintain a user session
 app.use(session({secret: 'ssshhhh', cookie:{maxAge:600000}, resave: true, saveUninitialized: true}));
+
+//routing
 app.use('/', serversession);
 
 
@@ -45,4 +47,3 @@ app.listen(3000, function () {
 })
 
 module.exports = app;
-
