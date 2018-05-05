@@ -7,7 +7,7 @@ router.get('/', controller.showForm);
 router.get('/login', controller.submit);
 
 // Post request routes
-router.post('/submit', controller.submit);
+router.push('/submit', controller.submit);
 
 // Allows other files to include the router
 module.exports = router;
