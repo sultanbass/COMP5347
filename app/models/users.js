@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 //schema to store users
 const UserSchema = mongoose.Schema({
-  first name:{
+  first_name:{
     type: String,
     required: true
   },
-  last name:{
+  last_name:{
     type: String,
     required: true
   },
@@ -24,7 +24,7 @@ const UserSchema = mongoose.Schema({
   }
 });
 
-var Wiki = mongoose.model('User',userSchema, 'wikipedia')
+const User = module.exports = mongoose.model('User', UserSchema);
 
 //Export the model user Schema
-module.exports = userSchema;
+//module.exports = userSchema;
