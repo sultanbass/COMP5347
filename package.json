@@ -9,11 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-    "bcryptjs": "*",
-=======
     "bcryptjs": "^2.4.3",
->>>>>>> branch 'master' of https://github.com/sultanbass/COMP5347.git
     "body-parser": "*",
     "ejs": "*",
     "express": "^4.16.3",
@@ -22,11 +18,6 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "path": "*",
-<<<<<<< HEAD
-    "passport": "*",
-    "passport-local":"*",
-=======
->>>>>>> branch 'master' of https://github.com/sultanbass/COMP5347.git
     "pug": "*"
   }
 }
