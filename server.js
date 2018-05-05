@@ -1,8 +1,9 @@
 /**
  * Assignment 2 - main server
  */
-const mongoose = require('mongoose')
-const express = require('express')
+const mongoose = require('mongoose');
+const express = require('express');
+const passport = require("passport");
 var path = require('path')
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -17,8 +18,13 @@ app.set('views', path.join(__dirname, 'app/views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //bodyParser middleware
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Register passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // code to maintain a user session
 app.use(session({secret: 'ssshhhh', cookie:{maxAge:600000}, resave: true, saveUninitialized: true}));
