@@ -15,6 +15,7 @@
     "express-session": "^1.15.6",
     "mongoose": "^5.0.17",
     "path": "*",
+    "passport": "*",
     "pug": "*"
   }
 }
