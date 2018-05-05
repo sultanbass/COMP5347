@@ -4,7 +4,7 @@ module.exports.showForm = function(req, res){
 	res.render('test.ejs');
 };
 
-module.exports.userdasboard = function(req, res){
+module.exports.userdashboard = function(req, res){
 	res.render('test2.ejs');
 };
 

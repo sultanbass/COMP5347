@@ -10,14 +10,16 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "*",
-    "ejs": "*",
+    "body-parser": "^1.18.2",
+    "chartjs": "^0.3.24",
+    "ejs": "^2.5.9",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "express-validator": "^5.1.2",
     "mongoose": "^5.0.17",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "path": "*",
-    "pug": "*"
+    "path": "^0.12.7",
+    "pug": "^2.0.3"
   }
 }
