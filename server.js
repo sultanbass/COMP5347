@@ -1,8 +1,5 @@
 /**
- * Assigment 2 - main server
- */
-/*update comment
- *
+ * Assignment 2 - main server
  */
 const mongoose = require('mongoose')
 const express = require('express')
@@ -13,18 +10,13 @@ var serversession = require('./app/routes/server.routes');
 
 const app = express();
 
-/* variables here
-*
-* app.locacls.<variableName> = <VariableValue>;
-* app.locacls.<variableName2> = <VariableValue>;
-*
-*/
-
 // This is a method used to set environment variables that Express will use in its configuration
 app.set('views', path.join(__dirname, 'app/views'));
 
-
+//This is the path for the static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+//bodyParser middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -33,10 +25,19 @@ app.use(session({secret: 'ssshhhh', cookie:{maxAge:600000}, resave: true, saveUn
 app.use('/', serversession);
 
 
-//Connect ot mongodb
-mongoose.connect('mongodb://localhost/COMP5347');
+//Connect to mongodb
+mongoose.connect('mongodb://localhost/wikipedia');
+var db = mongoose.connection;
+
+//check DB connection
+db.once('open', function (){
+  console.log('Connected to MongoDB');
+});
 
 // Start the server on port 3000
 app.listen(3000, function () {
-  console.log('survey app listening on port 3000!')
+  console.log('Wikilatic app listening on port 3000!')
 })
+
+module.exports = app;
+
