@@ -13,7 +13,7 @@ const expressValidator = require('express-validator');
 const app = express();
 const flash = require('connect-flash');
 
-// This is a method used to set environment variables that Express will use in its configuration
+// This is a method used to set environment variables that Express will use in its configuration 
 app.set('views', path.join(__dirname, 'app/views'));
 app.set('view engine', 'pug');
 //This is the path for the static folder
