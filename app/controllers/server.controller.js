@@ -8,7 +8,7 @@ module.exports.register = function(req, res){
 	res.render('signup');
 };
 
-<<<<<<< HEAD
+
 module.exports.charts = function(req, res){
 	var labels = ["2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008"];
 	var datasets=[{
@@ -32,14 +32,10 @@ module.exports.charts = function(req, res){
 	res.render('charts.ejs', {labels:labels, datasets:datasets});
 
 };
-=======
+
 module.exports.userdashboard = function(req, res){
 	res.render('mainpage');
 };
 
-
-
-
->>>>>>> branch 'master' of https://github.com/sultanbass/COMP5347.git
 	//	res.render('<ejs or pug page>', {data in JSON format})
 	//console.log("submit function");
