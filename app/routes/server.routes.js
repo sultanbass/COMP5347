@@ -21,14 +21,15 @@ router.post('/userdashboard', controller.userdashboard);
 
 //registration process
 router.post('/register', function(req, res){
-  var first_name = req.body.firstname;
-  var last_name = req.body.lastname;
+  var first_name = req.body.firs_tname;
+  var last_name = req.body.last_name;
   var email = req.body.email;
   var username = req.body.username;
   var password = req.body.password;
 
   //validate the fields
-  req.checkBody('name', 'Name is required').notEmpty();
+  req.checkBody('first_name', 'First Name is required').notEmpty();
+  req.checkBody('last_name', 'Last Name is required').notEmpty();
   req.checkBody('email', 'Email is required').notEmpty();
   req.checkBody('email', 'Email is not valid').isEmail();
   req.checkBody('username', 'Username is required').notEmpty();
@@ -42,8 +43,8 @@ router.post('/register', function(req, res){
     });
   } else {
     let newUser = new User({
-      first_name:firstname,
-      last_name:lastname,
+      first_name:first_name,
+      last_name:last_name,
       email:email,
       username:username,
       password:password

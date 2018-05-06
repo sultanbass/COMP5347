@@ -14,7 +14,7 @@ const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const dbconfig = require(./config/database);
 const passport = require('passport');
-const config = require('./config/database');
+const dbconfig = require('./config/database');
 
 //intilialize the express app
 const app = express();
@@ -66,7 +66,7 @@ app.use('/', serversession);
 
 
 //Connect to mongodb
-mongoose.connect('mongodb://localhost/wikipedia');
+mongoose.connect(dbconfig.database);
 var db = mongoose.connection;
 //check DB connection
 db.once('open', function (){
