@@ -5,14 +5,19 @@ const mongoose = require('mongoose');
 const express = require('express');
 const passport = require("passport");
 //const chartjs = require("chartjs");
-var path = require('path')
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var serversession = require('./app/routes/server.routes');
-var register = require('./app/routes/users');
+const path = require('path')
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const serversession = require('./app/routes/server.routes');
+const register = require('./app/routes/users');
 const expressValidator = require('express-validator');
-const app = express();
 const flash = require('connect-flash');
+const dbconfig = require(./config/database);
+const passport = require('passport');
+const config = require('./config/database');
+
+//intilialize the express app
+const app = express();
 
 // This is a method used to set environment variables that Express will use in its configuration
 app.set('views', path.join(__dirname, 'app/views'));
