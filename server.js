@@ -12,7 +12,7 @@ const serversession = require('./app/routes/server.routes');
 const register = require('./app/routes/users');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
-const dbconfig = require('./config/database');
+//const config = require('./config/database');
 
 //intilialize the express app
 const app = express();
@@ -65,7 +65,7 @@ app.use('/', serversession);
 
 
 //Connect to mongodb
-mongoose.connect(dbconfig.database);
+mongoose.connect('mongodb://localhost:27017/wikipedia');
 var db = mongoose.connection;
 //check DB connection
 db.once('open', function (){
