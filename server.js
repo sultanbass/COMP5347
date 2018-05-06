@@ -12,8 +12,6 @@ const serversession = require('./app/routes/server.routes');
 const register = require('./app/routes/users');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
-const dbconfig = require(./config/database);
-const passport = require('passport');
 const dbconfig = require('./config/database');
 
 //intilialize the express app
@@ -30,6 +28,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Register passport middleware
+require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
