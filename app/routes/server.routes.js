@@ -8,6 +8,7 @@ var User = require('../models/users');
 // Get request routes
 router.get('/', controller.showForm);
 router.get('/register', controller.register);
+router.get('/charts', controller.charts);
 
 // Post request routes
 router.post('/userdashboard', controller.userdashboard);
