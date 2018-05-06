@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
 //Bring the user model and wiki articles model
-var User = require('../models/users');
+var User = require('../models/user');
 var Wiki = require('../models/wikiarticles');
 
 

@@ -12,7 +12,7 @@ const serversession = require('./app/routes/server.routes');
 const register = require('./app/routes/users');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
-//const config = require('./config/database');
+const config = require('./config/database');
 
 //intilialize the express app
 const app = express();
