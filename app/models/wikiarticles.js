@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-//Create schema for wiki pages
+//Create schema for wiki pages  
 const wikiSchema = new mongoose.Schema ({
   title:{
     type: String,
@@ -16,7 +16,8 @@ const wikiSchema = new mongoose.Schema ({
   },
 });
 
-var Wiki = mongoose.model('Wiki',wikiSchema, 'wikipedia')
+
+//var Wiki = mongoose.model('Wiki',wikiSchema, 'wikipedia')
 
 //Export the model wiki Schema
-module.exports = wikiSchema;
+const Wiki = module.exports = mongoose.model('Wiki', wikiSchema);
