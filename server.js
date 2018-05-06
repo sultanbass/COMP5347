@@ -4,7 +4,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const passport = require("passport");
-//const chartjs = require("chartjs");
 const path = require('path')
 const bodyParser = require('body-parser');
 const session = require('express-session');
