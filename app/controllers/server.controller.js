@@ -100,6 +100,7 @@ module.exports.charts = function(req, res){
 
 };
 
+/* 
 module.exports.userdashboard = function(req, res){
 // Login Process
 	router.post('/userdashboard', function(req, res, next){
@@ -111,9 +112,11 @@ module.exports.userdashboard = function(req, res){
 	});
 };
 
+/*
 //Logout Process
 router.get('/logout', function(req, res){
   req.logout();
   req.flash('success', 'You are logged out.');
   res.redirect('/');
 });
+*/
