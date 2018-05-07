@@ -6,7 +6,7 @@ const User = require('../models/user');
 const Wiki = require('../models/wikiarticles');
 
 module.exports.showForm = function(req, res){
-	
+
 	/*
 	 * TESTING PURPOSES ONLY - REMOVE FOR FINAL
 	 * Check and log number of records in DB
@@ -14,7 +14,7 @@ module.exports.showForm = function(req, res){
 	Wiki.count({}, function( err, count){
 	    console.log( "Number of DB records:", count );
 	})
-	
+
 	res.render('landingpage');
 };
 
@@ -101,19 +101,20 @@ module.exports.charts = function(req, res){
 };
 
 
-module.exports.userdashboard = function(req, res){
-	res.render('mainpage');
-	/*
+module.exports.userdashboard = function(req, res, next){
+	//res.render('mainpage');
+
 	// Login Process
-	router.post('/userdashboard', function(req, res, next){
   	passport.authenticate('local', {
     	successRedirect:'/userdashboard',
     	failureRedirect:'/',
     	failureFlash: true
   	})(req, res, next);
-	});*/
-};
+	};
 
+module.exports.mainpage = function(req, res) {
+	res.render('mainpage');
+}
 /*
 //Logout Process
 router.get('/logout', function(req, res){

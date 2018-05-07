@@ -10,6 +10,7 @@ const passport = require('passport');
 router.get('/', controller.showForm);
 router.get('/register', controller.register);
 router.get('/charts', controller.charts);
+router.get('/userdashboard', controller.mainpage);
 
 // Post request routes
 router.post('/userdashboard', controller.userdashboard);
