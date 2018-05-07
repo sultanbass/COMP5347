@@ -100,16 +100,18 @@ module.exports.charts = function(req, res){
 
 };
 
-/* 
+
 module.exports.userdashboard = function(req, res){
-// Login Process
+	res.render('mainpage');
+	/*
+	// Login Process
 	router.post('/userdashboard', function(req, res, next){
   	passport.authenticate('local', {
     	successRedirect:'/userdashboard',
     	failureRedirect:'/',
     	failureFlash: true
   	})(req, res, next);
-	});
+	});*/
 };
 
 /*
