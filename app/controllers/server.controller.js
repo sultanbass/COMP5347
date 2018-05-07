@@ -6,6 +6,15 @@ const User = require('../models/user');
 const Wiki = require('../models/wikiarticles');
 
 module.exports.showForm = function(req, res){
+	
+	/*
+	 * TESTING PURPOSES ONLY - REMOVE FOR FINAL
+	 * Check and log number of records in DB
+	 */
+	Wiki.count({}, function( err, count){
+	    console.log( "Number of DB records:", count );
+	})
+	
 	res.render('landingpage');
 };
 
@@ -67,6 +76,7 @@ module.exports.signup = function(req, res){
 
 
 module.exports.charts = function(req, res){
+
 	var labels = ["2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008"];
 	var datasets=[{
 		label: 'Administrator',

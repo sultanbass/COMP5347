@@ -20,4 +20,4 @@ const wikiSchema = new mongoose.Schema ({
 //var Wiki = mongoose.model('Wiki',wikiSchema, 'wikipedia')
 
 //Export the model wiki Schema
-const Wiki = module.exports = mongoose.model('Wiki', wikiSchema);
+const Wiki = module.exports = mongoose.model('Revision', wikiSchema);
