@@ -12,7 +12,7 @@ module.exports.showForm = function(req, res){
 module.exports.register = function(req, res){
 	res.render('signup');
 };
-
+//Registration process
 module.exports.signup = function(req, res){
 	var first_name = req.body.first_name;
 	var last_name = req.body.last_name;
@@ -91,8 +91,19 @@ module.exports.charts = function(req, res){
 };
 
 module.exports.userdashboard = function(req, res){
-	res.render('mainpage');
+// Login Process
+	router.post('/userdashboard', function(req, res, next){
+  	passport.authenticate('local', {
+    	successRedirect:'/userdashboard',
+    	failureRedirect:'/',
+    	failureFlash: true
+  	})(req, res, next);
+	});
 };
 
-	//	res.render('<ejs or pug page>', {data in JSON format})
-	//console.log("submit function");
+//Logout Process
+router.get('/logout', function(req, res){
+  req.logout();
+  req.flash('success', 'You are logged out');
+  res.redirect('/');
+});
