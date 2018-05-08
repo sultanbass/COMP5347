@@ -4,14 +4,17 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const passport = require("passport");
-var path = require('path')
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var serversession = require('./app/routes/server.routes');
-var register = require('./app/routes/users');
+const path = require('path')
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const serversession = require('./app/routes/server.routes');
+const register = require('./app/routes/users');
 const expressValidator = require('express-validator');
-const app = express();
 const flash = require('connect-flash');
+const config = require('./config/database');
+
+//intilialize the express app
+const app = express();
 
 // This is a method used to set environment variables that Express will use in its configuration
 app.set('views', path.join(__dirname, 'app/views'));
@@ -24,8 +27,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Register passport middleware
+require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.get('*', function(req, res, next){
+  res.locals.user = req.user || null;
+  next();
+});
 
 // Express Messages Middleware
 app.use(require('connect-flash')());
@@ -60,7 +69,7 @@ app.use('/', serversession);
 
 
 //Connect to mongodb
-mongoose.connect('mongodb://localhost/wikipedia');
+mongoose.connect('mongodb://localhost:27017/wikipedia');
 var db = mongoose.connection;
 //check DB connection
 db.once('open', function (){
