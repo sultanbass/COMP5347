@@ -11,7 +11,7 @@ router.get('/', controller.showForm);
 router.get('/register', controller.register);
 router.get('/charts', controller.charts);
 router.get('/userdashboard', controller.mainpage);
-
+router.get('/logout', controller.logout);
 // Post request routes
 router.post('/userdashboard', controller.userdashboard);
 router.post('/register',controller.signup);

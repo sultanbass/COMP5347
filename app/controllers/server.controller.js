@@ -102,8 +102,6 @@ module.exports.charts = function(req, res){
 
 
 module.exports.userdashboard = function(req, res, next){
-	//res.render('mainpage');
-
 	// Login Process
   	passport.authenticate('local', {
     	successRedirect:'/userdashboard',
@@ -115,11 +113,10 @@ module.exports.userdashboard = function(req, res, next){
 module.exports.mainpage = function(req, res) {
 	res.render('mainpage');
 }
-/*
+
 //Logout Process
-router.get('/logout', function(req, res){
+module.exports.logout = function(req, res) {
   req.logout();
   req.flash('success', 'You are logged out.');
   res.redirect('/');
-});
-*/
+};
