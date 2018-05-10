@@ -1,11 +1,16 @@
 extends layout
 
 block content
+ div
+  img(src="image1.jpg")
+  h2 Website created by group 12
+  hr
+  br
  .main.container
   .row
    .col-md-6.col-md-offset-3
     h1.display-4.m-b-2 Log In
-    form(method='POST' action='/userdashboard')
+    form(method='POST' action='/login')
      div.form-group
       label(for='username') Username    
       input.form-control(type='text' id='username' placeholder='username' name='username')

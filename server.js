@@ -7,7 +7,7 @@ const passport = require("passport");
 const path = require('path')
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const serversession = require('./app/routes/server.routes');
+const serverRoutes = require('./app/routes/server.routes');
 const register = require('./app/routes/users');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
@@ -61,11 +61,16 @@ app.use(expressValidator({
   }
 }));
 
-// code to maintain a user session
-app.use(session({secret: 'ssshhhh', cookie:{maxAge:600000}, resave: true, saveUninitialized: true}));
+// User Session Middleware
+app.use(session({
+  secret: 'ssshhhh',
+  cookie:{maxAge:600000},
+  resave: true,
+  saveUninitialized: true
+}));
 
 //routing
-app.use('/', serversession);
+app.use('/', serverRoutes);
 
 
 //Connect to mongodb

@@ -5,8 +5,7 @@ const passport = require('passport');
 const User = require('../models/user');
 const Wiki = require('../models/wikiarticles');
 
-module.exports.showForm = function(req, res){
-
+module.exports.landingpage = function(req, res){
 	/*
 	 * TESTING PURPOSES ONLY - REMOVE FOR FINAL
 	 * Check and log number of records in DB
@@ -14,13 +13,14 @@ module.exports.showForm = function(req, res){
 	Wiki.count({}, function( err, count){
 	    console.log( "Number of DB records:", count );
 	})
-
 	res.render('landingpage');
 };
 
 module.exports.register = function(req, res){
 	res.render('signup');
 };
+
+
 //Registration process
 module.exports.signup = function(req, res){
 	var first_name = req.body.first_name;
@@ -94,15 +94,13 @@ module.exports.charts = function(req, res){
         label: 'Regular User',
         data: [4, 9, 2, 4, 6, 23]
 	}];
-
 	// send data as objects for render
 	res.render('charts.ejs', {labels:labels, datasets:datasets});
 
 };
 
-
-module.exports.userdashboard = function(req, res, next){
-	// Login Process
+// Login Process
+module.exports.login = function(req, res, next){
   	passport.authenticate('local', {
     	successRedirect:'/userdashboard',
     	failureRedirect:'/',
@@ -110,13 +108,13 @@ module.exports.userdashboard = function(req, res, next){
   	})(req, res, next);
 	};
 
-module.exports.mainpage = function(req, res) {
-	res.render('mainpage');
-}
-
 //Logout Process
 module.exports.logout = function(req, res) {
   req.logout();
   req.flash('success', 'You are logged out.');
   res.redirect('/');
 };
+
+module.exports.mainpage = function(req, res) {
+	res.render('mainpage');
+}
