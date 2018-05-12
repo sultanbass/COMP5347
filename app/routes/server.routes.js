@@ -5,7 +5,6 @@ var router = express.Router();
 // Get request routes
 router.get('/', controller.landingpage);
 router.get('/register', controller.register);
-router.get('/charts', controller.charts);
 router.get('/logout', controller.logout);
 router.get('/userdashboard', controller.mainpage);
 
