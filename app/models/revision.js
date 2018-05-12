@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 //Create schema for wiki pages
-const wikiSchema = new mongoose.Schema ({
+const revSchema = new mongoose.Schema ({
   title:{
     type: String,
     index: true,
@@ -20,12 +20,13 @@ const wikiSchema = new mongoose.Schema ({
   },
 });
 
+/*TEST FUNCTION
 //Get names of all wikiarticles
 wikiSchema.revisions.Titlename = function(callback){
 	return this.distinct("title")
 	.exec(callback)
 };
-//var Wiki = mongoose.model('Wiki',wikiSchema, 'wikipedia')
+*/
 
 //Export the model wiki Schema
-const Wiki = module.exports = mongoose.model('Revision', wikiSchema);
+const Revision = module.exports = mongoose.model('Revision', revSchema);

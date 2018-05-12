@@ -3,16 +3,24 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 //Bring the user model and wiki articles model
 const User = require('../models/user');
-const Wiki = require('../models/wikiarticles');
-
+const Revision = require('../models/revision');
 module.exports.landingpage = function(req, res){
 	/*
+	 * TODO
 	 * TESTING PURPOSES ONLY - REMOVE FOR FINAL
 	 * Check and log number of records in DB
 	 */
-	Wiki.count({}, function( err, count){
+	Revision.count({}, function( err, count){
 	    console.log( "Number of DB records:", count );
 	})
+	/*Revision.find({}, function(err, revisions) {
+		if (err) {
+			console.log("Error finding db records");
+		}
+		else {
+			console.log(revisions);
+		}
+	})*/
 	res.render('landingpage');
 };
 
@@ -74,30 +82,6 @@ module.exports.signup = function(req, res){
 	}
 };
 
-
-module.exports.charts = function(req, res){
-
-	var labels = ["2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008"];
-	var datasets=[{
-		label: 'Administrator',
-		data: [12, 19, 3, 5, 2, 3]
-	},
-	{
-		label: 'Anonymous',
-        data: [4, 9, 2, 4, 6, 23]
-	},
-	{
-        label: 'Bot',
-        data: [4, 9, 2, 4, 6, 23]
-	},
-	{
-        label: 'Regular User',
-        data: [4, 9, 2, 4, 6, 23]
-	}];
-	// send data as objects for render
-	res.render('charts.ejs', {labels:labels, datasets:datasets});
-
-};
 
 // Login Process
 module.exports.login = function(req, res, next){

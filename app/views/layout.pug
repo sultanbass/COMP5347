@@ -2,6 +2,15 @@ doctype html
 html
  head
   title Wikilactic
+  link(rel='stylesheet' type='text/css' href='/css/style.css' media='screen')
+  script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+  script(src="/js/main.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js")
+  script.
+    window.Chart || document.write('<script src="/js/Chart.min.js"><\/script>');
+  script(src="https://code.jquery.com/jquery-3.3.1.min.js")
+  script.
+    window.jQuery || document.write('<script src="/js/jquery-3.3.1.min.js"><\/script>');
  body
   != messages('message', locals)
   if errors

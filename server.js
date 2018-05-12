@@ -8,7 +8,6 @@ const path = require('path')
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const serverRoutes = require('./app/routes/server.routes');
-const register = require('./app/routes/users');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const config = require('./config/database');
