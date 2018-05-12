@@ -4,17 +4,24 @@ const passport = require('passport');
 const fs = require('fs');
 //Bring the user model and wiki articles model
 const User = require('../models/user');
-const Wiki = require('../models/wikiarticles');
-
+const Revision = require('../models/revision');
 module.exports.landingpage = function(req, res){
 	/*
 	 * TODO
 	 * TESTING PURPOSES ONLY - REMOVE FOR FINAL
 	 * Check and log number of records in DB
 	 */
-	Wiki.count({}, function( err, count){
+	Revision.count({}, function( err, count){
 	    console.log( "Number of DB records:", count );
 	})
+	/*Revision.find({}, function(err, revisions) {
+		if (err) {
+			console.log("Error finding db records");
+		}
+		else {
+			console.log(revisions);
+		}
+	})*/
 	res.render('landingpage');
 };
 
