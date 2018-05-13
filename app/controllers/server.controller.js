@@ -109,9 +109,10 @@ module.exports.mainpage = function(req, res) {
 			leastRev1 = result[len - 1];
 			leastRev2 = result[len - 2];
 			leastRev3 = result[len - 3];
+			res.render('mainpage', {highestRev1:highestRev1, highestRev2:highestRev2, highestRev3:highestRev3, leastRev1:leastRev1, leastRev2:leastRev2, leastRev3:leastRev3});
 		}
 	})
-	res.render('mainpage', {highestRev1:highestRev1, highestRev2:highestRev2, highestRev3:highestRev3, leastRev1:leastRev1, leastRev2:leastRev2, leastRev3:leastRev3});
+	
 }
 
 module.exports.distByType = function(req, res){
@@ -132,6 +133,5 @@ module.exports.distByType = function(req, res){
 		revisions: 57
 	}];
 	
-	//data = [13, 8, 12, 57];
 	res.send({data:data});
 }
