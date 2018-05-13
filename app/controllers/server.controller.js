@@ -5,6 +5,8 @@ const fs = require('fs');
 //Bring the user model and wiki articles model
 const User = require('../models/user');
 const Revision = require('../models/revision');
+
+
 module.exports.landingpage = function(req, res){
 	/*
 	 * TODO
