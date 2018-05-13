@@ -1,6 +1,7 @@
 var express = require('express');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const fs = require('fs');
 //Bring the user model and wiki articles model
 const User = require('../models/user');
 const Revision = require('../models/revision');
@@ -110,3 +111,4 @@ module.exports.mainpage = function(req, res) {
 	})
 	res.render('mainpage', {highestRev1:highestRev1, highestRev2:highestRev2, highestRev3:highestRev3, leastRev1:leastRev1, leastRev2:leastRev2, leastRev3:leastRev3});
 }
+
