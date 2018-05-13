@@ -1,5 +1,6 @@
 window.onload = function(){
-	showBarChart();	
+	//showBarChart();
+	showPieChart();
 }
 
 function showBarChart() {
@@ -57,8 +58,8 @@ function showBarChart() {
 		        {
 		            label: datasets[3].label,
 		            data: datasets[3].data,
-		            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-		            borderColor: 'rgba(255, 159, 64, 1)',
+		            backgroundColor: 'rgba(83, 222, 83, 0.2)',
+		            borderColor: 'rgba(83, 222, 83, 1)',
 			            borderWidth: 1
 			        }]
 			    },
@@ -71,5 +72,39 @@ function showBarChart() {
 			            }]
 			        }
 			    }
+	});
+}
+
+function showPieChart() {
+	/*
+	 * TODO
+	 * Pull data from database
+	 * Remove hardcoded data
+	 * Use jquery selectors
+	 */
+	var labels = ["Administrator", "Anonymous", "Bot", "Regular User"];
+	var data = [13, 8, 12, 57];
+	
+	
+	let pieChart = document.getElementById('barChart').getContext('2d');
+	let overallYearlyRevision = new Chart(pieChart, {
+		 type: 'pie',
+		    data: {
+		    	datasets: [{
+		            data: data,
+		            backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(83, 222, 83, 0.2)'],
+		            borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)', 'rgba(83, 222, 83, 1)'],
+		    	}],
+		        labels: labels,
+			    options: {
+			        scales: {
+			            yAxes: [{
+			                ticks: {
+			                    beginAtZero:true
+			                }
+			            }]
+			        }
+			    }
+		    }
 	});
 }
