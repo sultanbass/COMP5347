@@ -115,7 +115,14 @@ module.exports.mainpage = function(req, res) {
 	
 }
 
+// Overall analytics pie chart - number of revisions by user type
 module.exports.distByType = function(req, res){
+	/*
+	 * TODO
+	 * Remove hardcoded values, request data from database
+	 * Identify users and build response object
+	 */
+	
 	var data = [{
 		user: 'Administrator',
 		revisions: 13
