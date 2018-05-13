@@ -8,6 +8,10 @@ router.get('/register', controller.register);
 router.get('/logout', controller.logout);
 router.get('/userdashboard', controller.mainpage);
 
+// Ajax requests
+router.get('/distByType', controller.distByType);
+
+
 // Post request routes
 router.post('/login', controller.login);
 router.post('/register', controller.signup);

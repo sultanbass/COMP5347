@@ -1,6 +1,9 @@
 window.onload = function(){
+	$.get('/distByType', 0, function(response){
+		data = response.data;
+		showPieChart(data);
+	})
 	//showBarChart();
-	showPieChart();
 }
 
 function showBarChart() {
@@ -75,27 +78,18 @@ function showBarChart() {
 	});
 }
 
-function showPieChart() {
-	/*
-	 * TODO
-	 * Pull data from database
-	 * Remove hardcoded data
-	 * Use jquery selectors
-	 */
-	var labels = ["Administrator", "Anonymous", "Bot", "Regular User"];
-	var data = [13, 8, 12, 57];
-	
+function showPieChart(data) {
 	
 	let pieChart = document.getElementById('barChart').getContext('2d');
 	let overallYearlyRevision = new Chart(pieChart, {
 		 type: 'pie',
 		    data: {
 		    	datasets: [{
-		            data: data,
+		            data: [data[0].revisions, data[1].revisions, data[2].revisions, data[3].revisions],
 		            backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(83, 222, 83, 0.2)'],
 		            borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)', 'rgba(83, 222, 83, 1)'],
 		    	}],
-		        labels: labels,
+		        labels: [data[0].user, data[1].user, data[2].user, data[3].user],
 			    options: {
 			        scales: {
 			            yAxes: [{

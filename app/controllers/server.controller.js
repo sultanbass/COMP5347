@@ -113,3 +113,25 @@ module.exports.mainpage = function(req, res) {
 	})
 	res.render('mainpage', {highestRev1:highestRev1, highestRev2:highestRev2, highestRev3:highestRev3, leastRev1:leastRev1, leastRev2:leastRev2, leastRev3:leastRev3});
 }
+
+module.exports.distByType = function(req, res){
+	var data = [{
+		user: 'Administrator',
+		revisions: 13
+	},
+	{
+		user: 'Anonymous',
+		revisions: 8
+	},
+	{
+		user: 'Bot',
+		revisions: 12
+	},
+	{
+		user: 'Regular User',
+		revisions: 57
+	}];
+	
+	//data = [13, 8, 12, 57];
+	res.send({data:data});
+}
