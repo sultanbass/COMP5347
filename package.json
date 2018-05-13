@@ -11,11 +11,8 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
-<<<<<<< HEAD
-=======
     "chartjs": "^0.3.24",
     "connect-flash": "^0.1.1",
->>>>>>> branch 'master' of https://github.com/sultanbass/COMP5347.git
     "ejs": "^2.5.9",
     "express": "^4.16.3",
     "express-messages": "^1.0.1",
