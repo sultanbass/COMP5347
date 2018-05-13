@@ -34,8 +34,15 @@ button:hover {
   border-color: #ebccd1;
 }
 
+
 .alert-success_msg{
   padding: 5px;
+    color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+.alert-success{
   color: #3c763d;
   background-color: #dff0d8;
   border-color: #d6e9c6;
@@ -54,4 +61,6 @@ button:hover {
     color: white;
     margin-bottom: 5px;
 }
+
+
 
