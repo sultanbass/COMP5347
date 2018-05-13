@@ -101,7 +101,7 @@ module.exports.mainpage = function(req, res) {
 			// three articles with highest number of revisions
 			highestRev1 = result[0];
 			highestRev2 = result[1];
-			highestRev3 = result[3];
+			highestRev3 = result[2];
 			// three articles with lowest number of revisions
 			len = result.length;
 			leastRev1 = result[len - 1];
@@ -111,4 +111,3 @@ module.exports.mainpage = function(req, res) {
 	})
 	res.render('mainpage', {highestRev1:highestRev1, highestRev2:highestRev2, highestRev3:highestRev3, leastRev1:leastRev1, leastRev2:leastRev2, leastRev3:leastRev3});
 }
-
