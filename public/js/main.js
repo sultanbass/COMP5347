@@ -1,4 +1,21 @@
 window.onload = function(){
+	
+	/*
+	 * TODO
+	 * Error checking before even trying to display the chart
+	 * 
+	 * var jqxhr = $.get('/distByType', function(response){
+	 * jqxhr.done(function(response){
+	 * 		data = response.data;
+			showPieChart(data);
+	 * });
+	 * jqxhr.fail(function(jqXHR){
+	 * 		console.log("error loading chart");
+	 * });
+	 * }
+	 * 
+	 */
+	
 	$.get('/distByType', function(response){
 		data = response.data;
 		showPieChart(data);
@@ -6,6 +23,7 @@ window.onload = function(){
 	//showBarChart();
 }
 
+// Create the bar chart
 function showBarChart() {
 	/*
 	 * TODO
@@ -78,6 +96,8 @@ function showBarChart() {
 	});
 }
 
+
+// Create the pie chart
 function showPieChart(data) {
 	
 	let pieChart = document.getElementById('barChart').getContext('2d');
