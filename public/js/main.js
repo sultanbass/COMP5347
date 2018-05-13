@@ -1,5 +1,5 @@
 window.onload = function(){
-	$.get('/distByType', 0, function(response){
+	$.get('/distByType', function(response){
 		data = response.data;
 		showPieChart(data);
 	})
