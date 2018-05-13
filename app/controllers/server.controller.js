@@ -13,14 +13,6 @@ module.exports.landingpage = function(req, res){
 	Revision.count({}, function( err, count){
 	    console.log( "Number of DB records:", count );
 	})
-	/*Revision.find({}, function(err, revisions) {
-		if (err) {
-			console.log("Error finding db records");
-		}
-		else {
-			console.log(revisions);
-		}
-	})*/
 	res.render('landingpage');
 };
 
@@ -100,5 +92,21 @@ module.exports.logout = function(req, res) {
 };
 
 module.exports.mainpage = function(req, res) {
-	res.render('mainpage');
+
+	Revision.findNumRev(function(err, result) {
+		if (err) {
+			console.log("Error finding number of revisions");
+		} else {
+			// three articles with highest number of revisions
+			highestRev1 = result[0];
+			highestRev2 = result[1];
+			highestRev3 = result[3];
+			// three articles with lowest number of revisions
+			len = result.length;
+			leastRev1 = result[len - 1];
+			leastRev2 = result[len - 2];
+			leastRev3 = result[len - 3];
+		}
+	})
+	res.render('mainpage', {highestRev1:highestRev1, highestRev2:highestRev2, highestRev3:highestRev3, leastRev1:leastRev1, leastRev2:leastRev2, leastRev3:leastRev3});
 }

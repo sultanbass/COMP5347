@@ -3,4 +3,25 @@ extends layout
 block content
  h1 Hi there. Welcome  !
  a(href='/logout') Log Out
- canvas#barChart
+ p Top 3 articles with highest number of revisions
+ table
+   tr
+     th Title
+   tr
+     td 1.#{highestRev1._id}
+   tr
+     td 2.#{highestRev2._id}
+   tr
+     td 3.#{highestRev3._id}
+ p Top 3 articles with lowest number of revsions
+ table
+  tr
+    th Title
+  tr
+    td 1.#{leastRev1._id}
+  tr
+    td 2.#{leastRev2._id}
+  tr
+    td 3.#{leastRev3._id}
+
+ canvas#barChart   

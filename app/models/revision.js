@@ -18,15 +18,30 @@ const revSchema = new mongoose.Schema ({
      type: String,
      index: true,
   },
+  versionKey: false,
 });
 
-/*TEST FUNCTION
-//Get names of all wikiarticles
-wikiSchema.revisions.Titlename = function(callback){
-	return this.distinct("title")
+
+//Find total number of Revisions for each article
+revSchema.statics.findNumRev= function(callback){
+	var pipeline = [
+		{$group: {_id:"$title", numOfRevisons: {$sum:1}}},
+		{$sort: {numOfRevsions:-1}}
+	];
+	return this.aggregate(pipeline)
 	.exec(callback)
 };
-*/
 
-//Export the model wiki Schema
-const Revision = module.exports = mongoose.model('Revision', revSchema);
+var Revision = mongoose.model('Revision', revSchema, 'revisions')
+
+//Export the model Revision Schema
+module.exports = Revision
+
+//Find distinct registered users from article "CNN"
+Revision.distinct('user', {'anon':{'$exists':false},'title':'CNN'}, function(err,users){
+	if (err){
+		console.log("Query error!")
+	}else{
+		console.log("There are " + users.length + " distinct users in CNN");
+	}
+})
