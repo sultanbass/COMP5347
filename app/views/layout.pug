@@ -12,7 +12,7 @@ html
   script.
     window.jQuery || document.write('<script src="/js/jquery-3.3.1.min.js"><\/script>');
  body
-  != messages('message', locals)
+  != messages()
   if errors
    each error, i in errors
     div(class="alert alert-danger") #{error.msg}
