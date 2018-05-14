@@ -109,9 +109,10 @@ if (isNaN(number)) {
 		} else {
 			// three articles with highest number of revisions
 			revision = result;
+			res.render('mainpage', {number:number, revision:revision});
 		}
 	})
-	res.render('mainpage', {number:number, revision:revision});
+
 }
 
 // Overall analytics pie chart - number of revisions by user type
