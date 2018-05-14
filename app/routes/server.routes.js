@@ -15,6 +15,6 @@ router.get('/distByType', controller.distByType);
 // Post request routes
 router.post('/login', controller.login);
 router.post('/register', controller.signup);
-
+router.post('/userdashboard', controller.mainpage)
 // Allows other files to include the router
 module.exports = router;

@@ -1,9 +1,9 @@
 window.onload = function(){
-	
+
 	/*
 	 * TODO
 	 * Error checking before even trying to display the chart
-	 * 
+	 *
 	 * var jqxhr = $.get('/distByType', function(response){
 	 * jqxhr.done(function(response){
 	 * 		data = response.data;
@@ -13,9 +13,9 @@ window.onload = function(){
 	 * 		console.log("error loading chart");
 	 * });
 	 * }
-	 * 
+	 *
 	 */
-	
+
 	$.get('/distByType', function(response){
 		data = response.data;
 		showPieChart(data);
@@ -48,8 +48,8 @@ function showBarChart() {
         label: 'Regular User',
         data: [9, 2, 2, 9, 6, 16]
 	}];
-	
-	
+
+
 	let barChart = document.getElementById('barChart').getContext('2d');
 	let overallYearlyRevision = new Chart(barChart, {
 		 type: 'bar',
@@ -99,7 +99,7 @@ function showBarChart() {
 
 // Create the pie chart
 function showPieChart(data) {
-	
+
 	let pieChart = document.getElementById('barChart').getContext('2d');
 	let overallYearlyRevision = new Chart(pieChart, {
 		 type: 'pie',
@@ -122,3 +122,11 @@ function showPieChart(data) {
 		    }
 	});
 }
+
+//ajax request to reload list of revisions
+$(document).ready(function(){
+	$('#button').on('click', function(e){
+    var data=$('#number').val();
+		$('#results').load('/userdashboard?number='+data +' #results')
+		});
+});

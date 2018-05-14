@@ -95,24 +95,23 @@ module.exports.logout = function(req, res) {
 };
 
 module.exports.mainpage = function(req, res) {
-
-	Revision.findNumRev(function(err, result) {
+var number = parseInt(req.query.number);
+if (number <0) {
+	alert("Number has to be greater than 0");
+}
+if (isNaN(number)) {
+	number = 3
+}
+	Revision.findNumRev(number, function(err, result) {
 		if (err) {
 			console.log("Error finding number of revisions");
+			console.log(err);
 		} else {
 			// three articles with highest number of revisions
-			highestRev1 = result[0];
-			highestRev2 = result[1];
-			highestRev3 = result[2];
-			// three articles with lowest number of revisions
-			len = result.length;
-			leastRev1 = result[len - 1];
-			leastRev2 = result[len - 2];
-			leastRev3 = result[len - 3];
-			res.render('mainpage', {highestRev1:highestRev1, highestRev2:highestRev2, highestRev3:highestRev3, leastRev1:leastRev1, leastRev2:leastRev2, leastRev3:leastRev3});
+			revision = result;
 		}
 	})
-	
+	res.render('mainpage', {number:number, revision:revision});
 }
 
 // Overall analytics pie chart - number of revisions by user type
@@ -122,7 +121,7 @@ module.exports.distByType = function(req, res){
 	 * Remove hardcoded values, request data from database
 	 * Identify users and build response object
 	 */
-	
+
 	var data = [{
 		user: 'Administrator',
 		revisions: 13
@@ -139,6 +138,6 @@ module.exports.distByType = function(req, res){
 		user: 'Regular User',
 		revisions: 57
 	}];
-	
+
 	res.send({data:data});
 }
