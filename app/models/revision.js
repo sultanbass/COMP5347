@@ -22,7 +22,7 @@ const revSchema = new mongoose.Schema ({
 });
 
 // Find users that are in userList grouped by year
-revSchema.statics.findRevByUser= function(userList, callback){
+revSchema.statics.findRevByYearUser= function(userList, callback){
 	var pipeline =
 		[
 			{
