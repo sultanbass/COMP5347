@@ -21,6 +21,28 @@ const revSchema = new mongoose.Schema ({
   versionKey: false,
 });
 
+// Find users that are in userList grouped by year
+revSchema.statics.findRevByUser= function(userList, callback){
+	var pipeline =
+		[
+			{
+				$match: {user: {$in:userList}}
+			},
+			{
+				$project: {
+					"year": {$substrBytes: ["$timestamp", 0, 4]}
+				}
+			},
+			{
+				$group: {_id: "$year", count:{$sum:1}}
+			},
+			{
+				$sort: {_id:1},
+			}
+		];
+	return this.aggregate(pipeline).exec(callback);
+};
+
 
 //Find total number of Revisions for each article
 revSchema.statics.findNumRev= function(number, callback){

@@ -129,6 +129,40 @@ if (isNaN(number)) {
 
 }
 
+
+module.exports.revByYearType = function(req, res){
+	
+	var bots = fs.readFileSync("Bot.txt").toString().split("\n");
+	var admins = fs.readFileSync("Admin.txt").toString().split("\n");
+		
+//	TESTING CODE
+//
+//	function readDB(callback){
+//
+//		var dataset = [];
+//		
+//		// bot edits
+//		Revision.findRevByUser(bots, function(err, result){
+//			//newData.push(result);
+//	        if (err) return callback(err)
+//	        callback(null, content)
+//		});
+//		
+//		// admin edits
+//		Revision.findRevByUser(admins, function(err, result){
+//	        if (err) return callback(err)
+//	        dataset.push(result);
+//		});
+//
+//		callback(null, dataset);
+//	}
+//	readDB(function(err, content){
+//		console.log("test");
+//		console.log(content);
+//	});
+//	
+}
+
 // Overall analytics pie chart - number of revisions by user type
 module.exports.distByType = function(req, res){
 	/*
@@ -136,7 +170,7 @@ module.exports.distByType = function(req, res){
 	 * Remove hardcoded values, request data from database
 	 * Identify users and build response object
 	 */
-
+	
 	var data = [{
 		user: 'Administrator',
 		revisions: 13
