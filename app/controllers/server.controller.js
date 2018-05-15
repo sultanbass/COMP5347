@@ -6,6 +6,9 @@ const fs = require('fs');
 const User = require('../models/user');
 const Revision = require('../models/revision');
 
+var bots = fs.readFileSync("Bot.txt").toString().split("\n");
+var admins = fs.readFileSync("Admin.txt").toString().split("\n");
+
 
 module.exports.landingpage = function(req, res){
 	/*
@@ -131,10 +134,15 @@ if (isNaN(number)) {
 
 
 module.exports.revByYearType = function(req, res){
+/*
+ * All queries in revision are ready.
+ *  functions are :
+ *  	findRevByYearUser(<array of bots OR admins>, callback)	
+ * 		findRevByYearRegUser(bots.concat(admins), callback)
+ * 	 	findRevByYearRegAnon(callback)
+ * 
+ */
 	
-	var bots = fs.readFileSync("Bot.txt").toString().split("\n");
-	var admins = fs.readFileSync("Admin.txt").toString().split("\n");
-		
 //	TESTING CODE
 //
 //	function readDB(callback){
@@ -165,13 +173,32 @@ module.exports.revByYearType = function(req, res){
 
 // Overall analytics pie chart - number of revisions by user type
 module.exports.distByType = function(req, res){
-	/*
-	 * TODO
-	 * Remove hardcoded values, request data from database
-	 * Identify users and build response object
-	 */
-
-	
+/*
+ * TODO
+ * Remove hardcoded values, request data from database
+ * Identify users and build response object
+ */
+//	TEST CODE
+//	Revision.findRevByUser(admins, function(err, result){
+//    if (err) return callback(err)
+//    console.log(result);
+//	});
+//	
+//	Revision.findRevByUser(bots, function(err, result){
+//	    if (err) return callback(err)
+//	    console.log(result);
+//	});
+//	
+//	Revision.findRevByRegUser(bots.concat(admins), function(err, result){
+//	    if (err) return callback(err)
+//	    console.log(result);
+//	    
+//	});	
+//	Revision.findRevByAnon(function(err, result){
+//	    if (err) return callback(err)
+//	    console.log(result);
+//	});
+//	
 	var data = [{
 		user: 'Administrator',
 		revisions: 13
