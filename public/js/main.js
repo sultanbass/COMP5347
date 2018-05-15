@@ -1,20 +1,23 @@
 window.onload = function(){
-
-var jqxhr = $.get('/distByType', function(response){
-	jqxhr.done(function(response){
-		data = response.data;
-		showPieChart('barChart', data);
-	});
-	jqxhr.fail(function(jqXHR){
-  		console.log("error loading chart");
-	});
- })
-
-//showBarChart();
+	/*
+	 * TODO
+	 * AJAX query for bar chart data, send as arg to function
+	 */
+	showBarChart('barChart', 0);
+	
+	var jqxhr = $.get('/distByType', function(response){
+		jqxhr.done(function(response){
+			data = response.data;
+			showPieChart('pieChart', data);
+		});
+		jqxhr.fail(function(jqXHR){
+	  		console.log("error loading chart");
+		});
+	 })
 }
 
 // Create the bar chart
-function showBarChart() {
+function showBarChart(element, data) {
 	/*
 	 * TODO
 	 * Pull data from database
