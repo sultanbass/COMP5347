@@ -23,14 +23,16 @@ const revSchema = new mongoose.Schema ({
 
 
 //Find total number of Revisions for each article
-revSchema.statics.findNumRev= function(callback){
+revSchema.statics.findNumRev= function(number, callback){
 	var pipeline = [
 		{$group: {_id:"$title", numOfRevisons: {$sum:1}}},
-		{$sort: {numOfRevsions:-1}}
+    {$limit:number},
+		{$sort: {numOfRevsions:1}}
 	];
 	return this.aggregate(pipeline)
 	.exec(callback)
 };
+
 
 var Revision = mongoose.model('Revision', revSchema, 'revisions')
 
