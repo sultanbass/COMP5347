@@ -176,45 +176,40 @@ module.exports.distByType = function(req, res){
 /*
  * TODO
  * Remove hardcoded values, request data from database
- * Identify users and build response object
+ * Temporary code - needs error checking and fixing
  */
 //	TEST CODE
-//	Revision.findRevByUser(admins, function(err, result){
-//    if (err) return callback(err)
-//    console.log(result);
-//	});
-//	
-//	Revision.findRevByUser(bots, function(err, result){
-//	    if (err) return callback(err)
-//	    console.log(result);
-//	});
-//	
-//	Revision.findRevByRegUser(bots.concat(admins), function(err, result){
-//	    if (err) return callback(err)
-//	    console.log(result);
-//	    
-//	});	
-//	Revision.findRevByAnon(function(err, result){
-//	    if (err) return callback(err)
-//	    console.log(result);
-//	});
-//	
-	var data = [{
-		user: 'Administrator',
-		revisions: 13
-	},
-	{
-		user: 'Anonymous',
-		revisions: 8
-	},
-	{
-		user: 'Bot',
-		revisions: 12
-	},
-	{
-		user: 'Regular User',
-		revisions: 57
-	}];
+	var count = 0;
+	var dataset = [];
 
-	res.send({data:data});
+	Revision.findRevByUser("Administrator", admins, getValues)
+	Revision.findRevByUser("Bot", bots, getValues)
+	Revision.findRevByRegUser(bots.concat(admins), getValues)
+	Revision.findRevByAnon(getValues)
+	
+	function getValues(err, result){
+		dataset.push(result[0]);
+		if (dataset.length == 4){
+			var data = [{
+				user: dataset[0]._id,
+				revisions: dataset[0].count
+			},
+			{
+				user: dataset[1]._id,
+				revisions: dataset[1].count
+			},
+			{
+				user: dataset[2]._id,
+				revisions: dataset[2].count
+			},
+			{
+				user: dataset[3]._id,
+				revisions: dataset[3].count
+			}];
+
+			res.send({data:data});
+		}
+	}
+		
+
 }

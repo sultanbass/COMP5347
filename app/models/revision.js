@@ -107,11 +107,11 @@ revSchema.statics.findRevByYearRegUser= function(userList, callback){
 
 //OVERALL STATS - PIE CHART QUERIES
 //Find user's revisions that are in userList
-revSchema.statics.findRevByUser= function(userList, callback){
+revSchema.statics.findRevByUser= function(userType, userList, callback){
 	var pipeline =
 		[
 			{$match: {user: {$in:userList}}},
-			{$group: {_id: "Admin Users", count:{$sum:1}}}
+			{$group: {_id: userType, count:{$sum:1}}}
 		];
 	return this.aggregate(pipeline).exec(callback);
 };
@@ -132,7 +132,7 @@ revSchema.statics.findRevByRegUser= function(userList, callback){
 		[
 			{$match: {user: {$nin:userList}}},
 			{$match: {anon: {$exists: false}}},
-			{$group: {_id: "Regular Users", count:{$sum:1}}}
+			{$group: {_id: "Regular User", count:{$sum:1}}}
 		]
 	return this.aggregate(pipeline).exec(callback);
 };
