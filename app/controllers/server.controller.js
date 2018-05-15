@@ -80,13 +80,27 @@ module.exports.signup = function(req, res){
 
 // Login Process
 module.exports.login = function(req, res, next){
-  	passport.authenticate('local', {
-    	successRedirect:'/userdashboard',
-    	failureRedirect:'/',
-    	failureFlash: true
-  	})(req, res, next);
-	};
-
+	
+	var username = req.body.username;
+	var password = req.body.password;
+	
+	req.checkBody('username', 'Username is required').notEmpty();
+	req.checkBody('password', 'Password is required').notEmpty();
+	
+	var errors = req.validationErrors();
+	if(errors){
+		res.render('landingpage', {
+			errors:errors
+		});
+	}
+	else{
+			passport.authenticate('local', {
+				successRedirect:'/userdashboard',
+				failureRedirect:'/',
+				failureFlash: true
+			})(req, res, next);
+		}
+};
 //Logout Process
 module.exports.logout = function(req, res) {
   req.logout();
