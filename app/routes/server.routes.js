@@ -9,6 +9,7 @@ router.get('/logout', controller.logout);
 router.get('/userdashboard', controller.mainpage);
 
 // Ajax requests
+router.get('/revByYearType', controller.distByType);
 router.get('/distByType', controller.distByType);
 
 

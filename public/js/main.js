@@ -3,14 +3,24 @@ window.onload = function(){
 	 * TODO
 	 * AJAX query for bar chart data, send as arg to function
 	 */
-	showBarChart('barChart', 0);
 	
-	var jqxhr = $.get('/distByType', function(response){
-		jqxhr.done(function(response){
+//	var jqxhrBar = $.get('/distByType', function(response){
+//		jqxhrBar.done(function(response){
+//			data = response.data;
+			showBarChart('barChart', 0);
+//		});
+//		jqxhrBar.fail(function(jqXHR){
+//	  		console.log("error loading chart");
+//		});
+//	 })
+	
+	
+	var jqxhrPie = $.get('/distByType', function(response){
+		jqxhrPie.done(function(response){
 			data = response.data;
 			showPieChart('pieChart', data);
 		});
-		jqxhr.fail(function(jqXHR){
+		jqxhrPie.fail(function(jqXHR){
 	  		console.log("error loading chart");
 		});
 	 })
