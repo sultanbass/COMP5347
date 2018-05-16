@@ -119,7 +119,7 @@ if (number <0) {
 if (isNaN(number)) {
 	number = 3
 }
-	Revision.findNumRev(number, function(err, result) {
+	Revision.findHighNumRev(number, function(err, result) {
 		if (err) {
 			console.log("Error finding number of revisions");
 			console.log(err);
@@ -134,14 +134,119 @@ if (isNaN(number)) {
 
 
 module.exports.revByYearType = function(req, res){
-/*
- * All queries in revision are ready.
- *  functions are :
- *  	findRevByYearUser(<array of bots OR admins>, callback)	
- * 		findRevByYearRegUser(bots.concat(admins), callback)
- * 	 	findRevByYearRegAnon(callback)
- * 
- */
+	
+		async.series([ 		
+		
+		function(callback) {
+
+			fs.readFile(admin_path, function(err, data) {
+				if (err) {
+					console.log("Read admin.txt error!")
+				} else {
+					admins = data.toString().split("\n");
+					console.log("Reading admin")
+					callback(null, admins)
+					
+				}
+			})
+		},
+
+		function(callback) {
+
+			fs.readFile(bot_path, function(err, data) {
+
+				if (err) {
+					console.log("Read bot.txt error!")
+				} else {
+					bots = data.toString().split("\n");
+					console.log("Reading bots")
+					callback(null, bots)
+					
+				}
+			})
+		},
+
+		function(callback) {
+			Revision.findRevByYearUser(bots, function(err, result) {
+				if (err) {
+					console.log("Cannot find year_bot");
+					return (callback(err))
+				} else {
+					console.log("Year for bots")
+					console.log(result)
+					year_bot = result;
+					callback(null, year_bot)
+				}
+			})
+		},
+		
+		function(callback) {
+			Revision.findRevByYearUser(admins, function(err, result) {
+				if (err) {
+					console.log("Cannot find year_admin");
+					return (callback(err))
+				} else {
+					console.log("Year for admins")
+					console.log(result)
+					year_admin = result;
+					callback(null, year_admin)
+				}
+			})
+		},
+		
+		function(callback) {
+				Revision.findRevByYearRegUser(bots.concat(admins), function(err, result) {
+					if (err) {
+						console.log("Cannot find Regular User");
+						return (callback(err))
+					} else {
+						console.log("Year Regular users")
+						console.log(result)
+						regUser = result;
+						callback(null, regUser)
+					}
+				})
+		},
+		
+		function(callback) {
+			Revision.findRevByYearAnon(function(err, result) {
+				if (err) {
+					console.log("Cannot find year_anon");
+					return (callback(err))
+				} else {
+					console.log("Year anonymous")
+					console.log(result)
+					year_anon = result;
+					callback(null, year_anon)
+				}
+			})
+		},
+		
+		function(callback) {
+			var datasets=[{
+				label: 'Administrator',
+				data: [12, 19, 3, 5, 2, 3]
+			},
+			{
+				label: 'Anonymous',
+				data: [4, 9, 3, 4, 4, 23]
+			},
+			{
+				label: 'Bot',
+				data: [1, 1, 7, 4, 9, 21]
+			},
+			{
+				label: 'Regular User',
+				data: [9, 2, 2, 9, 6, 16]
+			}];
+			console.log("hello")
+			console.log(datasets);
+			res.send({data:datasets});
+			callback(null, datasets)
+		}
+	],)
+}
+
 	
 //	TESTING CODE
 //
@@ -169,16 +274,11 @@ module.exports.revByYearType = function(req, res){
 //		console.log(content);
 //	});
 //	
-}
+
 
 // Overall analytics pie chart - number of revisions by user type
 module.exports.distByType = function(req, res){
-/*
- * TODO
-*/
-//	var bots = fs.readFileSync("Bot.txt").toString().split("\n");
-//	var admins = fs.readFileSync("Admin.txt").toString().split("\n");
-	
+
 	async.series([ 		
 		
 		function(callback) {
@@ -212,8 +312,8 @@ module.exports.distByType = function(req, res){
 					console.log("Cannot find year_bot");
 					return (callback(err))
 				} else {
-					console.log("This is for bots")
-					console.log(result)
+//					console.log("This is for bots")
+//					console.log(result)
 					year_bot = result;
 					callback(null, year_bot)
 				}
@@ -226,8 +326,8 @@ module.exports.distByType = function(req, res){
 					console.log("Cannot find year_admin");
 					return (callback(err))
 				} else {
-					console.log("This is for admins")
-					console.log(result)
+//					console.log("This is for admins")
+//					console.log(result)
 					year_admin = result;
 					callback(null, year_admin)
 				}
@@ -240,8 +340,8 @@ module.exports.distByType = function(req, res){
 						console.log("Cannot find Regular User");
 						return (callback(err))
 					} else {
-						console.log("This is Regular users")
-						console.log(result)
+//						console.log("This is Regular users")
+//						console.log(result)
 						regUser = result;
 						callback(null, regUser)
 					}
@@ -254,8 +354,8 @@ module.exports.distByType = function(req, res){
 					console.log("Cannot find year_anon");
 					return (callback(err))
 				} else {
-					console.log("This is for anonymous")
-					console.log(result)
+//					console.log("This is for anonymous")
+//					console.log(result)
 					year_anon = result;
 					callback(null, year_anon)
 				}
@@ -268,26 +368,18 @@ module.exports.distByType = function(req, res){
 			var sumAdmin = 0;
 			for (var i = 0; i < year_admin.length; i++) {
 				sumAdmin = sumAdmin + year_admin[i]["count"];
-				console.log("Admin");
-				console.log(sumAdmin);
 			}
 			var sumBot = 0;
 			for (var i = 0; i < year_bot.length; i++) {
 				sumBot = sumBot + year_bot[i]["count"];
-				console.log("Bot");
-				console.log(sumBot);
 			}
 			var sumAnon = 0;
 			for (var i = 0; i < year_anon.length; i++) {
 				sumAnon = sumAnon + year_anon[i]["count"];
-				console.log("Anonymous");
-				console.log(sumAnon);
 			}
 			var sumRegUser = 0;
 			for (var i = 0; i < regUser.length; i++) {
 				sumRegUser = sumRegUser + regUser[i]["count"];
-				console.log("Regular User");
-				console.log(sumRegUser);
 			}
 			
 			var data = [{

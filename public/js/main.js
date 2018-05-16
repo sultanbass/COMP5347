@@ -7,7 +7,7 @@ window.onload = function(){
 //	var jqxhrBar = $.get('/distByType', function(response){
 //		jqxhrBar.done(function(response){
 //			data = response.data;
-			showBarChart('barChart', 0);
+			//showBarChart('barChart', 0);
 //		});
 //		jqxhrBar.fail(function(jqXHR){
 //	  		console.log("error loading chart");
@@ -24,6 +24,17 @@ window.onload = function(){
 	  		console.log("error loading chart");
 		});
 	 })
+	 
+	 var jqxhrBar = $.get('/revByYearType', function(response){
+		jqxhrBar.done(function(response){
+			data = response.data;
+			showBarChart('barChart', data);
+		});
+		jqxhrBar.fail(function(jqXHR){
+	  		console.log("error loading chart");
+		});
+	 })
+	 
 }
 
 // Create the bar chart
@@ -34,30 +45,12 @@ function showBarChart(element, data) {
 	 * Remove hardcoded data
 	 * Use jquery selectors
 	 */
-	var labels = ["2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008"];
-	var datasets=[{
-		label: 'Administrator',
-		data: [12, 19, 3, 5, 2, 3]
-	},
-	{
-		label: 'Anonymous',
-        data: [4, 9, 3, 4, 4, 23]
-	},
-	{
-        label: 'Bot',
-        data: [1, 1, 7, 4, 9, 21]
-	},
-	{
-        label: 'Regular User',
-        data: [9, 2, 2, 9, 6, 16]
-	}];
-
 
 	let barChart = document.getElementById('barChart').getContext('2d');
 	let overallYearlyRevision = new Chart(barChart, {
 		 type: 'bar',
 		    data: {
-		        labels:["2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008"],
+		        labels:["2001", "2002", "2003", "2004", "2005", "2006"],
 		        datasets: [{
 		            label: datasets[0].label,
 		            data: datasets[0].data,
