@@ -5,7 +5,7 @@ const fs = require('fs');
 //Bring the user model and wiki articles model
 const User = require('../models/user');
 const Revision = require('../models/revision');
-
+var async = require('async');
 var bots = fs.readFileSync("Bot.txt").toString().split("\n");
 var admins = fs.readFileSync("Admin.txt").toString().split("\n");
 
@@ -151,7 +151,7 @@ module.exports.revByYearType = function(req, res){
 //		
 //		// bot edits
 //		Revision.findRevByYearUser(bots, function(err, result){
-//			//newData.push(result);
+//			newData.push(result);
 //	        if (err) return callback(err)
 //	        callback(null, content)
 //		});
@@ -175,41 +175,113 @@ module.exports.revByYearType = function(req, res){
 module.exports.distByType = function(req, res){
 /*
  * TODO
- * Remove hardcoded values, request data from database
- * Temporary code - needs error checking and fixing
- */
-//	TEST CODE
-	var count = 0;
-	var dataset = [];
-
-	Revision.findRevByUser("Administrator", admins, getValues)
-	Revision.findRevByUser("Bot", bots, getValues)
-	Revision.findRevByRegUser(bots.concat(admins), getValues)
-	Revision.findRevByAnon(getValues)
+*/
 	
-	function getValues(err, result){
-		dataset.push(result[0]);
-		if (dataset.length == 4){
-			var data = [{
-				user: dataset[0]._id,
-				revisions: dataset[0].count
-			},
-			{
-				user: dataset[1]._id,
-				revisions: dataset[1].count
-			},
-			{
-				user: dataset[2]._id,
-				revisions: dataset[2].count
-			},
-			{
-				user: dataset[3]._id,
-				revisions: dataset[3].count
-			}];
-
-			res.send({data:data});
-		}
-	}
+	async.series([ 		
+		function(callback) {
+			Revision.findRevByUser("Bot",bots, function(err, result) {
+				if (err) {
+					console.log("Cannot find year_bot");
+					return (callback(err))
+				} else {
+					console.log("This is for bots")
+					console.log(result)
+					year_bot = result;
+					callback(null, year_bot)
+				}
+			})
+		},
 		
+		function(callback) {
+			Revision.findRevByUser("Administrator",admins, function(err, result) {
+				if (err) {
+					console.log("Cannot find year_admin");
+					return (callback(err))
+				} else {
+					console.log("This is for admins")
+					console.log(result)
+					year_admin = result;
+					callback(null, year_admin)
+				}
+			})
+		},
+		
+		function(callback) {
+				Revision.findRevByRegUser(bots.concat(admins), function(err, result) {
+					if (err) {
+						console.log("Cannot find Regular User");
+						return (callback(err))
+					} else {
+						console.log("This is Regular users")
+						console.log(result)
+						regUser = result;
+						callback(null, regUser)
+					}
+				})
+		},
+		
+		function(callback) {
+			Revision.findRevByAnon(function(err, result) {
+				if (err) {
+					console.log("Cannot find year_anon");
+					return (callback(err))
+				} else {
+					console.log("This is for anonymous")
+					console.log(result)
+					year_anon = result;
+					callback(null, year_anon)
+				}
+			})
+		},
+		
+	
+		function(callback) {
 
+			var sumAdmin = 0;
+			for (var i = 0; i < year_admin.length; i++) {
+				sumAdmin = sumAdmin + year_admin[i]["count"];
+				console.log("Admin");
+				console.log(sumAdmin);
+			}
+			var sumBot = 0;
+			for (var i = 0; i < year_bot.length; i++) {
+				sumBot = sumBot + year_bot[i]["count"];
+				console.log("Bot");
+				console.log(sumBot);
+			}
+			var sumAnon = 0;
+			for (var i = 0; i < year_anon.length; i++) {
+				sumAnon = sumAnon + year_anon[i]["count"];
+				console.log("Anonymous");
+				console.log(sumAnon);
+			}
+			var sumRegUser = 0;
+			for (var i = 0; i < regUser.length; i++) {
+				sumRegUser = sumRegUser + regUser[i]["count"];
+				console.log("Regular User");
+				console.log(sumRegUser);
+			}
+			
+			var data = [{
+    			user: 'Administrator',
+    			revisions: sumAdmin
+    		},
+    		{
+    			user: 'Anonymous',
+    			revisions: sumAnon
+    		},
+    		{
+    			user: 'Bot',
+    			revisions: sumBot
+    		},
+    		{
+    			user: 'Regular User',
+    			revisions: sumRegUser
+    		}];
+			
+			console.log(data);
+			res.send({data:data});
+			callback(null, data)
+		}
+	],)
 }
