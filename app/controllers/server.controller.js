@@ -6,8 +6,8 @@ const fs = require('fs');
 const User = require('../models/user');
 const Revision = require('../models/revision');
 var async = require('async');
-var bots = fs.readFileSync("Bot.txt").toString().split("\n");
-var admins = fs.readFileSync("Admin.txt").toString().split("\n");
+var bot_path = "Bot.txt";
+var admin_path = "Admin.txt";
 
 
 module.exports.landingpage = function(req, res){
@@ -176,8 +176,36 @@ module.exports.distByType = function(req, res){
 /*
  * TODO
 */
+//	var bots = fs.readFileSync("Bot.txt").toString().split("\n");
+//	var admins = fs.readFileSync("Admin.txt").toString().split("\n");
 	
 	async.series([ 		
+		
+		function(callback) {
+
+			fs.readFile(admin_path, function(err, data) {
+				if (err) {
+					console.log("Read admin.txt error!")
+				} else {
+					admins = data.toString().split("\n");
+					callback(null, admins)
+				}
+			})
+		},
+
+		function(callback) {
+
+			fs.readFile(bot_path, function(err, data) {
+
+				if (err) {
+					console.log("Read bot.txt error!")
+				} else {
+					bots = data.toString().split("\n");
+					callback(null, bots)
+				}
+			})
+		},
+
 		function(callback) {
 			Revision.findRevByUser("Bot",bots, function(err, result) {
 				if (err) {
