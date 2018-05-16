@@ -267,16 +267,16 @@ module.exports.distByType = function(req, res){
     			revisions: sumAdmin
     		},
     		{
-    			user: 'Anonymous',
-    			revisions: sumAnon
-    		},
-    		{
     			user: 'Bot',
     			revisions: sumBot
     		},
     		{
     			user: 'Regular User',
     			revisions: sumRegUser
+    		},
+    		{
+    			user: 'Anonymous',
+    			revisions: sumAnon
     		}];
 			
 			console.log(data);
