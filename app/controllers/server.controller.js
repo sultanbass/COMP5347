@@ -83,13 +83,13 @@ module.exports.signup = function(req, res){
 
 // Login Process
 module.exports.login = function(req, res, next){
-	
+
 	var username = req.body.username;
 	var password = req.body.password;
-	
+
 	req.checkBody('username', 'Username is required').notEmpty();
 	req.checkBody('password', 'Password is required').notEmpty();
-	
+
 	var errors = req.validationErrors();
 	if(errors){
 		res.render('landingpage', {
@@ -110,6 +110,7 @@ module.exports.logout = function(req, res) {
   req.flash('success', 'You are logged out.');
   res.redirect('/');
 };
+
 
 module.exports.mainpage = function(req, res) {
 var number = parseInt(req.query.number);
@@ -134,9 +135,9 @@ if (isNaN(number)) {
 
 
 module.exports.revByYearType = function(req, res){
-	
-		async.series([ 		
-		
+
+		async.series([
+
 		function(callback) {
 
 			fs.readFile(admin_path, function(err, data) {
@@ -146,7 +147,7 @@ module.exports.revByYearType = function(req, res){
 					admins = data.toString().split("\n");
 					console.log("Reading admin")
 					callback(null, admins)
-					
+
 				}
 			})
 		},
@@ -161,7 +162,7 @@ module.exports.revByYearType = function(req, res){
 					bots = data.toString().split("\n");
 					console.log("Reading bots")
 					callback(null, bots)
-					
+
 				}
 			})
 		},
@@ -179,7 +180,7 @@ module.exports.revByYearType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 			Revision.findRevByYearUser(admins, function(err, result) {
 				if (err) {
@@ -193,7 +194,7 @@ module.exports.revByYearType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 				Revision.findRevByYearRegUser(bots.concat(admins), function(err, result) {
 					if (err) {
@@ -207,7 +208,7 @@ module.exports.revByYearType = function(req, res){
 					}
 				})
 		},
-		
+
 		function(callback) {
 			Revision.findRevByYearAnon(function(err, result) {
 				if (err) {
@@ -221,7 +222,7 @@ module.exports.revByYearType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 			var datasets=[{
 				label: 'Administrator',
@@ -247,20 +248,20 @@ module.exports.revByYearType = function(req, res){
 	],)
 }
 
-	
+
 //	TESTING CODE
 //
 //	function readDB(callback){
 //
 //		var dataset = [];
-//		
+//
 //		// bot edits
 //		Revision.findRevByYearUser(bots, function(err, result){
 //			newData.push(result);
 //	        if (err) return callback(err)
 //	        callback(null, content)
 //		});
-//		
+//
 //		// admin edits
 //		Revision.findRevByYearUser(admins, function(err, result){
 //	        if (err) return callback(err)
@@ -273,14 +274,14 @@ module.exports.revByYearType = function(req, res){
 //		console.log("test");
 //		console.log(content);
 //	});
-//	
+//
 
 
 // Overall analytics pie chart - number of revisions by user type
 module.exports.distByType = function(req, res){
 
-	async.series([ 		
-		
+	async.series([
+
 		function(callback) {
 
 			fs.readFile(admin_path, function(err, data) {
@@ -319,7 +320,7 @@ module.exports.distByType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 			Revision.findRevByUser("Administrator",admins, function(err, result) {
 				if (err) {
@@ -333,7 +334,7 @@ module.exports.distByType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 				Revision.findRevByRegUser(bots.concat(admins), function(err, result) {
 					if (err) {
@@ -347,7 +348,7 @@ module.exports.distByType = function(req, res){
 					}
 				})
 		},
-		
+
 		function(callback) {
 			Revision.findRevByAnon(function(err, result) {
 				if (err) {
@@ -361,8 +362,8 @@ module.exports.distByType = function(req, res){
 				}
 			})
 		},
-		
-	
+
+
 		function(callback) {
 
 			var sumAdmin = 0;
@@ -381,7 +382,7 @@ module.exports.distByType = function(req, res){
 			for (var i = 0; i < regUser.length; i++) {
 				sumRegUser = sumRegUser + regUser[i]["count"];
 			}
-			
+
 			var data = [{
     			user: 'Administrator',
     			revisions: sumAdmin
@@ -398,7 +399,7 @@ module.exports.distByType = function(req, res){
     			user: 'Anonymous',
     			revisions: sumAnon
     		}];
-			
+
 			console.log(data);
 			res.send({data:data});
 			callback(null, data)

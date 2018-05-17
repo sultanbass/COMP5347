@@ -44,12 +44,29 @@ revSchema.statics.findLowNumRev= function(number, callback){
 };
 
 
-//Find top 3 articles with the longest history
-revSchema.statics.findLongRev= function(number, callback){
+//find the article edited by largest group of registered users
+revSchema.statics.findMostUserEdits= function(number, callback){
 	var pipeline = [
-		{$group:{_id:"$title", timestamp:{$last:"$timestamp"}}},
-		{$sort:{timestamp:1}},
-		{$limit:3}
+    {$match: {anon: {$exists: false}}},
+    {$group:{_id:"$title", uniqueCount:{$addToSet:"$user"}}},
+    {$unwind:"$uniqueCount"},
+    {$group:{_id:"$_id", usercount:{$sum:1}}},
+    {$sort:{usercount:-1}},
+    {$limit:1}
+	];
+	return this.aggregate(pipeline)
+	.exec(callback)
+};
+
+//find the article edited by smallest group of registered users
+revSchema.statics.findLeastUserEdits= function(number, callback){
+	var pipeline = [
+    {$match: {anon: {$exists: false}}},
+    {$group:{_id:"$title", uniqueCount:{$addToSet:"$user"}}},
+    {$unwind:"$uniqueCount"},
+    {$group:{_id:"$_id", usercount:{$sum:1}}},
+    {$sort:{usercount:1}},
+    {$limit:1}
 	];
 	return this.aggregate(pipeline)
 	.exec(callback)
