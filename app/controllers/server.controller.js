@@ -114,10 +114,10 @@ module.exports.logout = function(req, res) {
 
 module.exports.mainpage = function(req, res) {
 var number = parseInt(req.query.number);
-if (number <0) {
-	alert("Number has to be greater than 0");
+if (number <=0) {
+	number = 3;
 }
-if (isNaN(number)) {
+if (isNaN(number) || null) {
 	number = 3
 }
 	Revision.findHighNumRev(number, function(err, result) {
