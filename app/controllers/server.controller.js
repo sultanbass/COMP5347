@@ -120,18 +120,87 @@ if (number <=0) {
 if (isNaN(number) || null) {
 	number = 3
 }
+
+async.series([
+
+function(callback) {
 	Revision.findHighNumRev(number, function(err, result) {
 		if (err) {
 			console.log("Error finding number of revisions");
 			console.log(err);
+			return (callback(err))
 		} else {
-			// three articles with highest number of revisions
-			revision = result;
-			res.render('mainpage', {number:number, revision:revision});
+			highestrevision = result;
+			callback(null, highestrevision);
 		}
 	})
+},
 
-}
+function(callback) {
+	Revision.findLowNumRev(number, function(err, result) {
+		if (err) {
+			console.log("Error finding number of revisions");
+			console.log(err);
+			return (callback(err))
+		} else {
+		  lowestrevision = result;
+			callback(null, lowestrevision);
+		}
+	})
+},
+
+function(callback) {
+	Revision.findMostUserEdits(function(err, result) {
+		if (err) {
+			console.log("Error finding most user edits");
+			return (callback(err))
+		} else {
+			mostUserEdits = result;
+			callback(null, mostUserEdits);
+		}
+	})
+},
+
+function(callback) {
+	Revision.findLeastUserEdits(function(err, result) {
+		if (err) {
+			console.log("Error finding most user edits");
+			return (callback(err))
+		} else {
+			leastUserEdits = result;
+			callback(null, leastUserEdits);
+		}
+	})
+},
+
+function(callback) {
+	Revision.findLongRev(function(err, result) {
+		if (err) {
+			console.log("Error finding most user edits");
+			return (callback(err))
+		} else {
+			longestRev = result;
+			callback(null, longestRev);
+		}
+	})
+},
+
+function(callback) {
+	Revision.findShortRev(function(err, result) {
+		if (err) {
+			console.log("Error finding most user edits");
+			return (callback(err))
+		} else {
+			shortestRev = result;
+			callback(null, shortestRev);
+		}
+	})
+},
+
+],function(err) {
+	res.render("mainpage.pug", {number:number})
+})
+};
 
 
 module.exports.revByYearType = function(req, res){

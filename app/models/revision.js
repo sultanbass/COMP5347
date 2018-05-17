@@ -24,8 +24,8 @@ const revSchema = new mongoose.Schema ({
 //Find highest number of Revisions for each article
 revSchema.statics.findHighNumRev= function(number, callback){
 	var pipeline = [
-		{$group: {_id:"$title", numOfRevisons: {$sum:1}}},
-		{$sort: {numOfRevsions:-1}},
+		{$group: {_id:"$title", count: {$sum:1}}},
+		{$sort: {count:-1}},
 		{$limit:number}
 	];
 	return this.aggregate(pipeline)
@@ -35,8 +35,8 @@ revSchema.statics.findHighNumRev= function(number, callback){
 //Find lowest number of Revisions for each article
 revSchema.statics.findLowNumRev= function(number, callback){
 	var pipeline = [
-		{$group: {_id:"$title", numOfRevisons: {$sum:1}}},
-		{$sort: {numOfRevsions:1}},
+		{$group: {_id:"$title", count: {$sum:1}}},
+		{$sort: {count:1}},
 		{$limit:number}
 	];
 	return this.aggregate(pipeline)
@@ -45,7 +45,7 @@ revSchema.statics.findLowNumRev= function(number, callback){
 
 
 //find the article edited by largest group of registered users
-revSchema.statics.findMostUserEdits= function(number, callback){
+revSchema.statics.findMostUserEdits= function(callback){
 	var pipeline = [
     {$match: {anon: {$exists: false}}},
     {$group:{_id:"$title", uniqueCount:{$addToSet:"$user"}}},
@@ -59,7 +59,7 @@ revSchema.statics.findMostUserEdits= function(number, callback){
 };
 
 //find the article edited by smallest group of registered users
-revSchema.statics.findLeastUserEdits= function(number, callback){
+revSchema.statics.findLeastUserEdits= function(callback){
 	var pipeline = [
     {$match: {anon: {$exists: false}}},
     {$group:{_id:"$title", uniqueCount:{$addToSet:"$user"}}},
@@ -72,11 +72,21 @@ revSchema.statics.findLeastUserEdits= function(number, callback){
 	.exec(callback)
 };
 
+//find atop 3 article with the longest history
+revSchema.statics.findLongRev= function(callback){
+	var pipeline = [
+		{$group:{_id:"$title", timestamp:{$last:"$timestamp"}}},
+		{$sort:{timestamp:1}},
+		{$limit:3}
+	];
+	return this.aggregate(pipeline)
+	.exec(callback)
+};
 
 //Find top 3 articles with the shortest history
-revSchema.statics.findShortRev= function(number, callback){
+revSchema.statics.findShortRev= function(callback){
 	var pipeline = [
-		{$group:{_id:"$title", timestamp:{last:"$timestamp"}}},
+		{$group:{_id:"$title", timestamp:{$last:"$timestamp"}}},
 		{$sort:{timestamp:-1}},
 		{$limit:3}
 	];
@@ -158,12 +168,3 @@ var Revision = mongoose.model('Revision', revSchema, 'revisions')
 
 //Export the model Revision Schema
 module.exports = Revision
-
-/*//Find distinct registered users from article "CNN"
-Revision.distinct('user', {'anon':{'$exists':false},'title':'CNN'}, function(err,users){
-	if (err){
-		console.log("Query error!")
-	}else{
-		console.log("There are " + users.length + " distinct users in CNN");
-	}
-})*/
