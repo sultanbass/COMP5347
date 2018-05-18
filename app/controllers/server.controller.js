@@ -5,10 +5,92 @@ const fs = require('fs');
 //Bring the user model and wiki articles model
 const User = require('../models/user');
 const Revision = require('../models/revision');
+var request = require('request');
 var async = require('async');
 var bot_path = "Bot.txt";
 var admin_path = "Admin.txt";
 
+
+// Check for new revisions and update DB
+module.exports.checkWikiAPI = function(req, res){
+	/*
+	 * TODO
+	 * get the req object
+	 * update the DB
+	 * send the result back in res object
+	 * 
+	 */
+	var title = "Australia"; //req.title;
+	var date;
+	var numUpdates;
+	
+	// Check the latest revision date for the title
+	function getLatestRevision(title){
+		return new Promise(function(resolve, reject){
+			Revision.latestRevDate(title, function(err, result) {	
+				if (err) {
+					console.log("Cannot find latest Time");
+				} else {
+					resolve(result[0]["timestamp"]);
+				}
+			})
+		})
+	}
+	
+	// Check wikiAPI and update db if new records exist
+	function checkAPI(){
+		return new Promise(function(resolve, reject){
+			var wikiEndpoint = 'https://en.wikipedia.org/w/api.php';
+			parameters = [ "action=query",
+							"format=json",
+							"prop=revisions",
+							"titles=" + title,
+							"rvstart=" + date,
+							"rvdir=newer", 
+							"rvlimit=max",
+							"rvprop=timestamp|size|user|ids|sha1|parsedcomment"]
+			var url = wikiEndpoint + "?" + parameters.join("&");
+			//console.log("url:" + url)
+			var options = {
+				url:url,
+				Accept: 'application/json', 
+				'Accept-Charset' : 'utf-8'
+			}
+			request(options, function(err, res, data){
+				if(err){
+					console.log('Error: ', err);
+				} else if(res.statusCode !== 200){
+					console.log('Status:', res.statusCode);
+				} else {
+					json = JSON.parse(data);
+					pages = json.query.pages
+					revisions = pages[Object.keys(pages)[0]].revisions;
+					// console.log("There are " + revisions.length + " new revisions.");
+					numUpdates = revisions.length;
+					for (i in revisions) {
+						revisions[i]["title"] = title;
+						
+						/* TODO
+						 * Update database and respond in resolve
+						 * 
+						 */
+					}
+					resolve(numUpdates);
+				}
+			});
+			
+		})
+	}
+	
+async function runAsync(){
+	date = await getLatestRevision(title);
+	numUpdates = await checkAPI();
+	console.log("new records " + numUpdates);
+}
+
+runAsync();
+	
+}
 
 module.exports.landingpage = function(req, res){
 	/*
@@ -83,13 +165,13 @@ module.exports.signup = function(req, res){
 
 // Login Process
 module.exports.login = function(req, res, next){
-
+	
 	var username = req.body.username;
 	var password = req.body.password;
-
+	
 	req.checkBody('username', 'Username is required').notEmpty();
 	req.checkBody('password', 'Password is required').notEmpty();
-
+	
 	var errors = req.validationErrors();
 	if(errors){
 		res.render('landingpage', {
@@ -111,13 +193,12 @@ module.exports.logout = function(req, res) {
   res.redirect('/');
 };
 
-
 module.exports.mainpage = function(req, res) {
 var number = parseInt(req.query.number);
-if (number <=0) {
-	number = 3;
+if (number <0) {
+	alert("Number has to be greater than 0");
 }
-if (isNaN(number) || null) {
+if (isNaN(number)) {
 	number = 3
 }
 	Revision.findHighNumRev(number, function(err, result) {
@@ -135,9 +216,9 @@ if (isNaN(number) || null) {
 
 
 module.exports.revByYearType = function(req, res){
-
-		async.series([
-
+	
+		async.series([ 		
+		
 		function(callback) {
 
 			fs.readFile(admin_path, function(err, data) {
@@ -147,7 +228,7 @@ module.exports.revByYearType = function(req, res){
 					admins = data.toString().split("\n");
 					console.log("Reading admin")
 					callback(null, admins)
-
+					
 				}
 			})
 		},
@@ -162,7 +243,7 @@ module.exports.revByYearType = function(req, res){
 					bots = data.toString().split("\n");
 					console.log("Reading bots")
 					callback(null, bots)
-
+					
 				}
 			})
 		},
@@ -180,7 +261,7 @@ module.exports.revByYearType = function(req, res){
 				}
 			})
 		},
-
+		
 		function(callback) {
 			Revision.findRevByYearUser(admins, function(err, result) {
 				if (err) {
@@ -194,7 +275,7 @@ module.exports.revByYearType = function(req, res){
 				}
 			})
 		},
-
+		
 		function(callback) {
 				Revision.findRevByYearRegUser(bots.concat(admins), function(err, result) {
 					if (err) {
@@ -208,7 +289,7 @@ module.exports.revByYearType = function(req, res){
 					}
 				})
 		},
-
+		
 		function(callback) {
 			Revision.findRevByYearAnon(function(err, result) {
 				if (err) {
@@ -222,7 +303,7 @@ module.exports.revByYearType = function(req, res){
 				}
 			})
 		},
-
+		
 		function(callback) {
 			var datasets=[{
 				label: 'Administrator',
@@ -248,20 +329,20 @@ module.exports.revByYearType = function(req, res){
 	],)
 }
 
-
+	
 //	TESTING CODE
 //
 //	function readDB(callback){
 //
 //		var dataset = [];
-//
+//		
 //		// bot edits
 //		Revision.findRevByYearUser(bots, function(err, result){
 //			newData.push(result);
 //	        if (err) return callback(err)
 //	        callback(null, content)
 //		});
-//
+//		
 //		// admin edits
 //		Revision.findRevByYearUser(admins, function(err, result){
 //	        if (err) return callback(err)
@@ -274,14 +355,14 @@ module.exports.revByYearType = function(req, res){
 //		console.log("test");
 //		console.log(content);
 //	});
-//
+//	
 
 
 // Overall analytics pie chart - number of revisions by user type
 module.exports.distByType = function(req, res){
 
-	async.series([
-
+	async.series([ 		
+		
 		function(callback) {
 
 			fs.readFile(admin_path, function(err, data) {
@@ -320,7 +401,7 @@ module.exports.distByType = function(req, res){
 				}
 			})
 		},
-
+		
 		function(callback) {
 			Revision.findRevByUser("Administrator",admins, function(err, result) {
 				if (err) {
@@ -334,7 +415,7 @@ module.exports.distByType = function(req, res){
 				}
 			})
 		},
-
+		
 		function(callback) {
 				Revision.findRevByRegUser(bots.concat(admins), function(err, result) {
 					if (err) {
@@ -348,7 +429,7 @@ module.exports.distByType = function(req, res){
 					}
 				})
 		},
-
+		
 		function(callback) {
 			Revision.findRevByAnon(function(err, result) {
 				if (err) {
@@ -362,8 +443,8 @@ module.exports.distByType = function(req, res){
 				}
 			})
 		},
-
-
+		
+	
 		function(callback) {
 
 			var sumAdmin = 0;
@@ -382,7 +463,7 @@ module.exports.distByType = function(req, res){
 			for (var i = 0; i < regUser.length; i++) {
 				sumRegUser = sumRegUser + regUser[i]["count"];
 			}
-
+			
 			var data = [{
     			user: 'Administrator',
     			revisions: sumAdmin
@@ -399,7 +480,7 @@ module.exports.distByType = function(req, res){
     			user: 'Anonymous',
     			revisions: sumAnon
     		}];
-
+			
 			console.log(data);
 			res.send({data:data});
 			callback(null, data)

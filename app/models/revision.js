@@ -21,6 +21,23 @@ const revSchema = new mongoose.Schema ({
   versionKey: false,
 });
 
+// Find the most recent revision for an article
+revSchema.statics.latestRevDate = function (_article,callback) {
+	var pipeline =[
+		{$match:{title:_article}},
+		{$sort:{timestamp:-1}},
+		{$limit:1},		
+		{$project:{timestamp:1}}
+	];
+	return this.aggregate(pipeline)
+	.exec(callback)
+};
+
+// Add a revision to the database
+revSchema.statics.addRevision = function (revision,callback) {
+	return this.updateOne(revision).exec(callback)
+}
+
 //Find highest number of Revisions for each article
 revSchema.statics.findHighNumRev= function(number, callback){
 	var pipeline = [
