@@ -19,3 +19,7 @@ router.post('/register', controller.signup);
 router.post('/userdashboard', controller.mainpage)
 // Allows other files to include the router
 module.exports = router;
+
+
+
+router.get('/testAPI', controller.checkWikiAPI);
