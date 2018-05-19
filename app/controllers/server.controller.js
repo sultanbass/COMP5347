@@ -46,8 +46,7 @@ module.exports.checkWikiAPI = function(req, res){
 							"rvstart=" + date,
 							"rvdir=newer", 
 							"rvlimit=max",
-							"rvprop=timestamp|user|ids", "format=json"]
-							//"rvprop=timestamp|size|user|ids|flags|sha1|parsedcomment"]
+							"rvprop=timestamp|size|user|ids|flags|sha1|parsedcomment"]
 			var url = wikiEndpoint + "?" + parameters.join("&");
 			//console.log("url:" + url)
 			var options = {
@@ -72,14 +71,19 @@ module.exports.checkWikiAPI = function(req, res){
 					/* TODO
 					 * WARNING: Unable to add fields not in schema (see line 52).
 					 */
-					Revision.addRevisions(revisions, function(err, result){
-						if(err){
-							console.log("Error: " + err);
-						}
-						else{
-							console.log("success");
-						}
-					})
+					if (revisions.length > 1){
+						Revision.addRevisions(revisions, function(err, result){
+							if(err){
+								console.log("Error: " + err);
+							}
+							else{
+								console.log("success");
+							}
+						})
+					}
+					else{
+						numUpdates = 0;
+					}
 					resolve(numUpdates);
 				}
 			});
@@ -92,11 +96,12 @@ async function runAsync(){
 	numUpdates = await checkAPI();
 	console.log("new records " + numUpdates);
 	
-	if(numUpdates > 1){
-		res.send(numUpdates);
+	if (numUpdates > 1){
+		res.send('Added ' + numUpdates + " new \"" + title + "\" revisions to the database");
 	}
-	else{
-		res.send(0);
+	else {
+		// Status 204 means no content
+		res.status(204).send();
 	}
 }
 
