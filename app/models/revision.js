@@ -45,8 +45,10 @@ revSchema.statics.findLowNumRev= function(number, callback){
 
 
 //find the article edited by largest group of registered users
-revSchema.statics.findMostUserEdits= function(callback){
+revSchema.statics.findMostUserEdits= function(admins,bots, callback){
 	var pipeline = [
+    {$match:{user:{$nin:admins}}},
+		{$match:{user:{$nin:bots}}},
     {$match: {anon: {$exists: false}}},
     {$group:{_id:"$title", uniqueCount:{$addToSet:"$user"}}},
     {$unwind:"$uniqueCount"},
@@ -59,8 +61,10 @@ revSchema.statics.findMostUserEdits= function(callback){
 };
 
 //find the article edited by smallest group of registered users
-revSchema.statics.findLeastUserEdits= function(callback){
+revSchema.statics.findLeastUserEdits= function(admins, bots, callback){
 	var pipeline = [
+    {$match:{user:{$nin:admins}}},
+		{$match:{user:{$nin:bots}}},
     {$match: {anon: {$exists: false}}},
     {$group:{_id:"$title", uniqueCount:{$addToSet:"$user"}}},
     {$unwind:"$uniqueCount"},
