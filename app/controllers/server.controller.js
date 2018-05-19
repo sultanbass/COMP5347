@@ -243,7 +243,32 @@ function(callback) {
 },
 
 function(callback) {
-	Revision.findMostUserEdits(function(err, result) {
+
+	fs.readFile(admin_path, function(err, data) {
+		if (err) {
+			console.log("Read admin.txt error!")
+		} else {
+			admins = data.toString().split("\n");
+			callback(null, admins)
+		}
+	})
+},
+
+function(callback) {
+
+	fs.readFile(bot_path, function(err, data) {
+
+		if (err) {
+			console.log("Read bot.txt error!")
+		} else {
+			bots = data.toString().split("\n");
+			callback(null, bots)
+		}
+	})
+},
+
+function(callback) {
+	Revision.findMostUserEdits(admins,bots, function(err, result) {
 		if (err) {
 			console.log("Error finding most user edits");
 			return (callback(err))
@@ -255,7 +280,7 @@ function(callback) {
 },
 
 function(callback) {
-	Revision.findLeastUserEdits(function(err, result) {
+	Revision.findLeastUserEdits(admins, bots, function(err, result) {
 		if (err) {
 			console.log("Error finding most user edits");
 			return (callback(err))
