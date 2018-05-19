@@ -7,6 +7,7 @@ router.get('/', controller.landingpage);
 router.get('/register', controller.register);
 router.get('/logout', controller.logout);
 router.get('/userdashboard', controller.mainpage);
+router.get('/updateRevisions', controller.checkWikiAPI);
 
 // Ajax requests
 router.get('/revByYearType', controller.revByYearType);
@@ -19,7 +20,3 @@ router.post('/register', controller.signup);
 router.post('/userdashboard', controller.mainpage)
 // Allows other files to include the router
 module.exports = router;
-
-
-
-router.get('/testAPI', controller.checkWikiAPI);

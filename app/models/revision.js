@@ -34,8 +34,11 @@ revSchema.statics.latestRevDate = function (_article,callback) {
 };
 
 // Add a revision to the database
-revSchema.statics.addRevision = function (revision,callback) {
-	return this.updateOne(revision).exec(callback)
+revSchema.statics.addRevisions = function (revisions, callback) {
+	if(revisions.length > 1){
+		this.insertMany(revisions, callback);
+	}
+	callback("No new revisions");
 }
 
 //Find highest number of Revisions for each article

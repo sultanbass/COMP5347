@@ -15,14 +15,12 @@ var admin_path = "Admin.txt";
 module.exports.checkWikiAPI = function(req, res){
 	/*
 	 * TODO
-	 * get the req object
-	 * update the DB
 	 * send the result back in res object
-	 * 
 	 */
-	var title = "Australia"; //req.title;
+	
+	var title = req.query.title;
 	var date;
-	var numUpdates;
+	var numUpdates = 0;
 	
 	// Check the latest revision date for the title
 	function getLatestRevision(title){
@@ -48,7 +46,8 @@ module.exports.checkWikiAPI = function(req, res){
 							"rvstart=" + date,
 							"rvdir=newer", 
 							"rvlimit=max",
-							"rvprop=timestamp|size|user|ids|sha1|parsedcomment"]
+							"rvprop=timestamp|user|ids"]
+							//"rvprop=timestamp|size|user|ids|flags|sha1|parsedcomment"]
 			var url = wikiEndpoint + "?" + parameters.join("&");
 			//console.log("url:" + url)
 			var options = {
@@ -65,17 +64,23 @@ module.exports.checkWikiAPI = function(req, res){
 					json = JSON.parse(data);
 					pages = json.query.pages
 					revisions = pages[Object.keys(pages)[0]].revisions;
-					// console.log("There are " + revisions.length + " new revisions.");
 					numUpdates = revisions.length;
-					for (i in revisions) {
-						revisions[i]["title"] = title;
-						
-						/* TODO
-						 * Update database and respond in resolve
-						 * 
-						 */
-					}
-					resolve(numUpdates);
+					revisions.map(function (obj){
+						obj.title = title;
+					});
+
+					/* TODO
+					 * WARNING: Unable to add fields not in schema (see line 52).
+					 */
+					Revision.addRevisions(revisions, function(err, result){
+						if(err){
+							console.log("Error: " + err);
+						}
+						else{
+							console.log("success");
+							resolve(numUpdates);
+						}
+					})
 				}
 			});
 			
@@ -86,6 +91,13 @@ async function runAsync(){
 	date = await getLatestRevision(title);
 	numUpdates = await checkAPI();
 	console.log("new records " + numUpdates);
+	
+	if(numUpdates > 1){
+		res.send(numUpdates);
+	}
+	else{
+		res.send(0);
+	}
 }
 
 runAsync();
