@@ -69,7 +69,7 @@ module.exports.checkWikiAPI = function(req, res){
 					});
 
 					/* TODO
-					 * WARNING: Unable to add fields not in schema (see line 52).
+					 * WARNING: Unable to add fields not in schema (see line 49).
 					 */
 					if (revisions.length > 1){
 						Revision.addRevisions(revisions, function(err, result){
