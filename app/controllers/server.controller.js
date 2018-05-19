@@ -46,7 +46,7 @@ module.exports.checkWikiAPI = function(req, res){
 							"rvstart=" + date,
 							"rvdir=newer", 
 							"rvlimit=max",
-							"rvprop=timestamp|user|ids"]
+							"rvprop=timestamp|user|ids", "format=json"]
 							//"rvprop=timestamp|size|user|ids|flags|sha1|parsedcomment"]
 			var url = wikiEndpoint + "?" + parameters.join("&");
 			//console.log("url:" + url)
@@ -78,9 +78,9 @@ module.exports.checkWikiAPI = function(req, res){
 						}
 						else{
 							console.log("success");
-							resolve(numUpdates);
 						}
 					})
+					resolve(numUpdates);
 				}
 			});
 			
