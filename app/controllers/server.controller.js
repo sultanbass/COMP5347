@@ -17,15 +17,15 @@ module.exports.checkWikiAPI = function(req, res){
 	 * TODO
 	 * send the result back in res object
 	 */
-	
+
 	var title = req.query.title;
 	var date;
 	var numUpdates = 0;
-	
+
 	// Check the latest revision date for the title
 	function getLatestRevision(title){
 		return new Promise(function(resolve, reject){
-			Revision.latestRevDate(title, function(err, result) {	
+			Revision.latestRevDate(title, function(err, result) {
 				if (err) {
 					console.log("Cannot find latest Time");
 				} else {
@@ -34,7 +34,7 @@ module.exports.checkWikiAPI = function(req, res){
 			})
 		})
 	}
-	
+
 	// Check wikiAPI and update db if new records exist
 	function checkAPI(){
 		return new Promise(function(resolve, reject){
@@ -44,14 +44,14 @@ module.exports.checkWikiAPI = function(req, res){
 							"prop=revisions",
 							"titles=" + title,
 							"rvstart=" + date,
-							"rvdir=newer", 
+							"rvdir=newer",
 							"rvlimit=max",
 							"rvprop=timestamp|size|user|ids|flags|sha1|parsedcomment"]
 			var url = wikiEndpoint + "?" + parameters.join("&");
 			//console.log("url:" + url)
 			var options = {
 				url:url,
-				Accept: 'application/json', 
+				Accept: 'application/json',
 				'Accept-Charset' : 'utf-8'
 			}
 			request(options, function(err, res, data){
@@ -87,15 +87,15 @@ module.exports.checkWikiAPI = function(req, res){
 					resolve(numUpdates);
 				}
 			});
-			
+
 		})
 	}
-	
+
 async function runAsync(){
 	date = await getLatestRevision(title);
 	numUpdates = await checkAPI();
 	console.log("new records " + numUpdates);
-	
+
 	if (numUpdates > 1){
 		res.send('Added ' + numUpdates + " new \"" + title + "\" revisions to the database");
 	}
@@ -106,18 +106,10 @@ async function runAsync(){
 }
 
 runAsync();
-	
+
 }
 
 module.exports.landingpage = function(req, res){
-	/*
-	 * TODO
-	 * TESTING PURPOSES ONLY - REMOVE FOR FINAL
-	 * Check and log number of records in DB
-	 */
-	Revision.count({}, function( err, count){
-	    console.log( "Number of DB records:", count );
-	})
 	res.render('landingpage');
 };
 
@@ -182,13 +174,13 @@ module.exports.signup = function(req, res){
 
 // Login Process
 module.exports.login = function(req, res, next){
-	
+
 	var username = req.body.username;
 	var password = req.body.password;
-	
+
 	req.checkBody('username', 'Username is required').notEmpty();
 	req.checkBody('password', 'Password is required').notEmpty();
-	
+
 	var errors = req.validationErrors();
 	if(errors){
 		res.render('landingpage', {
@@ -218,6 +210,8 @@ if (number <0) {
 if (isNaN(number)) {
 	number = 3
 }
+
+var title = req.query.title
 
 async.series([
 
@@ -320,6 +314,47 @@ function(callback) {
 	})
 },
 
+function(callback) {
+	Revision.findTitle(function(err, result) {
+		if (err) {
+			console.log("Error finding title");
+			return (callback(err))
+		} else {
+			titles = result;
+			console.log("these are the titles")
+			console.log(result)
+			callback(null, titles);
+		}
+	})
+},
+
+
+function(callback) {
+	Revision.findIndividual(title, function(err, result) {
+		if (err) {
+			console.log("Error finding individualquery");
+			console.log(err);
+			return (callback(err))
+		} else {
+		  individualarticle = result;
+			callback(null, individualarticle);
+		}
+	})
+},
+
+function(callback) {
+	Revision.findTop5Users(title, admins, bots, function(err, result) {
+		if (err) {
+			console.log("Error finding top 5 users");
+			console.log(err);
+			return (callback(err))
+		} else {
+		  top5users = result;
+			callback(null, top5users);
+		}
+	})
+},
+
 ],function(err) {
 	res.render("mainpage.pug", {number:number})
 })
@@ -327,9 +362,9 @@ function(callback) {
 
 
 module.exports.revByYearType = function(req, res){
-	
-		async.series([ 		
-		
+
+		async.series([
+
 		function(callback) {
 
 			fs.readFile(admin_path, function(err, data) {
@@ -339,7 +374,7 @@ module.exports.revByYearType = function(req, res){
 					admins = data.toString().split("\n");
 					console.log("Reading admin")
 					callback(null, admins)
-					
+
 				}
 			})
 		},
@@ -354,7 +389,7 @@ module.exports.revByYearType = function(req, res){
 					bots = data.toString().split("\n");
 					console.log("Reading bots")
 					callback(null, bots)
-					
+
 				}
 			})
 		},
@@ -372,7 +407,7 @@ module.exports.revByYearType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 			Revision.findRevByYearUser(admins, function(err, result) {
 				if (err) {
@@ -386,7 +421,7 @@ module.exports.revByYearType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 				Revision.findRevByYearRegUser(bots.concat(admins), function(err, result) {
 					if (err) {
@@ -400,7 +435,7 @@ module.exports.revByYearType = function(req, res){
 					}
 				})
 		},
-		
+
 		function(callback) {
 			Revision.findRevByYearAnon(function(err, result) {
 				if (err) {
@@ -414,7 +449,7 @@ module.exports.revByYearType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 			var datasets=[{
 				label: 'Administrator',
@@ -440,20 +475,20 @@ module.exports.revByYearType = function(req, res){
 	],)
 }
 
-	
+
 //	TESTING CODE
 //
 //	function readDB(callback){
 //
 //		var dataset = [];
-//		
+//
 //		// bot edits
 //		Revision.findRevByYearUser(bots, function(err, result){
 //			newData.push(result);
 //	        if (err) return callback(err)
 //	        callback(null, content)
 //		});
-//		
+//
 //		// admin edits
 //		Revision.findRevByYearUser(admins, function(err, result){
 //	        if (err) return callback(err)
@@ -466,14 +501,14 @@ module.exports.revByYearType = function(req, res){
 //		console.log("test");
 //		console.log(content);
 //	});
-//	
+//
 
 
 // Overall analytics pie chart - number of revisions by user type
 module.exports.distByType = function(req, res){
 
-	async.series([ 		
-		
+	async.series([
+
 		function(callback) {
 
 			fs.readFile(admin_path, function(err, data) {
@@ -512,7 +547,7 @@ module.exports.distByType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 			Revision.findRevByUser("Administrator",admins, function(err, result) {
 				if (err) {
@@ -526,7 +561,7 @@ module.exports.distByType = function(req, res){
 				}
 			})
 		},
-		
+
 		function(callback) {
 				Revision.findRevByRegUser(bots.concat(admins), function(err, result) {
 					if (err) {
@@ -540,7 +575,7 @@ module.exports.distByType = function(req, res){
 					}
 				})
 		},
-		
+
 		function(callback) {
 			Revision.findRevByAnon(function(err, result) {
 				if (err) {
@@ -554,8 +589,8 @@ module.exports.distByType = function(req, res){
 				}
 			})
 		},
-		
-	
+
+
 		function(callback) {
 
 			var sumAdmin = 0;
@@ -574,7 +609,7 @@ module.exports.distByType = function(req, res){
 			for (var i = 0; i < regUser.length; i++) {
 				sumRegUser = sumRegUser + regUser[i]["count"];
 			}
-			
+
 			var data = [{
     			user: 'Administrator',
     			revisions: sumAdmin
@@ -591,7 +626,7 @@ module.exports.distByType = function(req, res){
     			user: 'Anonymous',
     			revisions: sumAnon
     		}];
-			
+
 			console.log(data);
 			res.send({data:data});
 			callback(null, data)

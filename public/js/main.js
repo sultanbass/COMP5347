@@ -3,7 +3,7 @@ window.onload = function(){
 	 * TODO
 	 * AJAX query for bar chart data, send as arg to function
 	 */
-	
+
 //	var jqxhrBar = $.get('/distByType', function(response){
 //		jqxhrBar.done(function(response){
 //			data = response.data;
@@ -13,8 +13,10 @@ window.onload = function(){
 //	  		console.log("error loading chart");
 //		});
 //	 })
-	
-	
+
+//Default Hide Individaul Analytics section
+	$('#Individual').hide();
+
 	var jqxhrPie = $.get('/distByType', function(response){
 		jqxhrPie.done(function(response){
 			data = response.data;
@@ -24,7 +26,7 @@ window.onload = function(){
 	  		console.log("error loading chart");
 		});
 	 })
-	 
+
 	 var jqxhrBar = $.get('/revByYearType', function(response){
 		jqxhrBar.done(function(response){
 			data = response.data;
@@ -34,7 +36,7 @@ window.onload = function(){
 	  		console.log("error loading chart");
 		});
 	 })
-	 
+
 }
 
 // Create the bar chart
@@ -124,5 +126,31 @@ $(document).ready(function(){
 	$('#button').on('click', function(e){
     var data=$('#number').val();
 		$('#results').load('/userdashboard?number='+data +' #results')
+		});
+});
+
+//ajax request to load individual analytics section
+$(document).ready(function(){
+	$('#IndividualLink').on('click', function(e){
+		$('#Individual').show();
+		$('#Overall').hide();
+		e.preventDefault();
+		});
+});
+
+//ajax request to load overall analytics section
+$(document).ready(function(){
+	$('#OverallLink').on('click', function(e){
+		$('#Individual').hide();
+		$('#Overall').show();
+		e.preventDefault();
+		});
+});
+
+//ajax request to load individual article summary
+$(document).ready(function(){
+	$('#individualquery').on('click', function(e){
+    var data=$('#dropdown').val();
+		$('#articlesummary').load('/userdashboard?title='+data +' #articlesummary')
 		});
 });

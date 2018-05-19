@@ -2,47 +2,84 @@ extends layout
 
 block content
  h1 Hi there. Welcome  !
- a(href='/logout') Log Out
+ nav#navbar
+   ul#navbar
+     li#OverallLink
+       a(href = "#OverallLink") Overall Analytics
+     li#IndividualLink
+       a(href = "#IndividualLink") Individual Analytics
+     li#navbar 
+       a(href='/logout') Log Out
  div(class="container")
-  p Enter number of Articles:
-  input#number(type="text")
-  button#button(type='button') Submit
- h2 Overall Analytics
- div#results
-   table
-     tr
-       th Analytic
-       th Result
-     tr  
-       td Top #{number} articles with highest number of revisions 
-       td#revlist  
+  div#Overall
+   p Enter number of Articles:
+   input#number(type="text")
+   button#button(type='button') Submit
+   h2 Overall Analytics
+   div#results
+     table
+      tr
+        th Analytic
+        th Result
+      tr  
+        td Top #{number} articles with highest number of revisions :
+        td#revlist 
+         ol 
           each val in highestrevision
            li= val._id
-     tr  
-       td Top #{number} articles with lowest number of revisions 
-       td#revlist  
-          each val in lowestrevision
-           li= val._id             
-     tr       
-       td Article edited by largest group of registered users
-       td 
-        each val in mostUserEdits
-          li= val._id
-     tr       
-       td Article edited by smallest group of registered users
-       td 
-        each val in leastUserEdits
-          li= val._id
+      tr  
+        td Top #{number} articles with lowest number of revisions :
+        td#revlist 
+         ol  
+           each val in lowestrevision
+            li= val._id             
+      tr       
+        td Article edited by largest group of registered users :
+        td 
+         each val in mostUserEdits
+           = val._id
+      tr       
+        td Article edited by smallest group of registered users :
+        td 
+         each val in leastUserEdits
+           = val._id
+      tr
+        td Top 3 articles with longest history :
+        td 
+         ol
+          each val in longestRev
+           li= val._id
+      tr
+        td Top 3 articles with shortest history :
+        td
+         ol 
+          each val in shortestRev
+           li= val._id      
+   canvas#barChart   
+   canvas#pieChart
+ div#Individual
+    p Select article to display individual analytics:
+    select#dropdown
+      each val in titles
+        option=val 
+    button#individualquery(type='button') Search Article      
+    h2 Article Summary
+    table#articlesummary
      tr
-       td Top 3 articles with longest history
+       td Article Title
        td 
-        each val in longestRev
-          li= val._id
+        each val in individualarticle
+          =val._id
      tr
-       td Top 3 articles with shortest history
+       td Total Revisions
        td 
-         each val in shortestRev
-          li= val._id
-                 
- canvas#barChart   
- canvas#pieChart
+        each val in individualarticle
+         =val.count
+     tr(colspan=3)
+       td Top 5 Editors
+       td Username
+          each val in top5users
+           ol=val._id
+       td Total Revisions 
+          each val in top5users
+           ol=val.count

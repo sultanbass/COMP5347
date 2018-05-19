@@ -26,7 +26,7 @@ revSchema.statics.latestRevDate = function (_article,callback) {
 	var pipeline =[
 		{$match:{title:_article}},
 		{$sort:{timestamp:-1}},
-		{$limit:1},		
+		{$limit:1},
 		{$project:{timestamp:1}}
 	];
 	return this.aggregate(pipeline)
@@ -183,6 +183,38 @@ revSchema.statics.findRevByRegUser= function(userList, callback){
 			{$group: {_id: "Regular User", count:{$sum:1}}}
 		]
 	return this.aggregate(pipeline).exec(callback);
+};
+
+//Get title name of all revisions in db for dropdown
+revSchema.statics.findTitle = function(callback){
+	return this.distinct("title")
+	.exec(callback)
+};
+
+//find indivudal article
+revSchema.statics.findIndividual= function(title, callback){
+	var pipeline = [
+    {$match: {'title': title}},
+		{$group: {_id:"$title", count: {$sum:1}}},
+		{$sort: {count:-1}},
+	];
+	return this.aggregate(pipeline)
+	.exec(callback)
+};
+
+//find top 5 regular users of article
+revSchema.statics.findTop5Users= function(title, admins, bots, callback){
+	var pipeline = [
+		{$match: {'title': title}},
+		{$match:{user:{$nin:admins}}},
+		{$match:{user:{$nin:bots}}},
+		{$match: {anon: {$exists: false}}},
+		{$group: {_id:"$user", count:{$sum:1}}},
+		{$sort: {count:-1}},
+		{$limit:5}
+	];
+	return this.aggregate(pipeline)
+	.exec(callback)
 };
 
 var Revision = mongoose.model('Revision', revSchema, 'revisions')

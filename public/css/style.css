@@ -69,12 +69,20 @@ table {
 }
 
 table th {
-  text-align: left;
+  text-align: center;
 }
 
 table td{
-   border-top: 1pt solid #95BEF0;
-   line-height: 1.5em;
-   vertical-align: middle;
+   border: 1pt solid #95BEF0;
    padding: 0.5em 0.75em;
+   text-align: left;
+   vertical-align: middle;
+}
+
+table ol {
+  text-align: left;
+}
+
+p {
+  font-size: 14px;
 }
