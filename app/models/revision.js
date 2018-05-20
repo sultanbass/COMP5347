@@ -2,22 +2,16 @@ const mongoose = require('mongoose');
 
 //Create schema for wiki pages
 const revSchema = new mongoose.Schema ({
-  title:{
-    type: String,
-    index: true,
-  },
-  timestamp:{
-    type: String,
-    index: true,
-  },
-  user:{
-    type: String,
-    index: true,
-  },
-  anon:{
-     type: String,
-     index: true,
-  },
+  sha1: {type: String, index: false},
+  title: {type: String, index: true},
+  timestamp: {type: String, index: true},
+  parsedcomment: {type: String, index: false},
+  revid: {type: Number, index: false},
+  user: {type: String, index: true},
+  parentid: {type: Number, index: false},
+  size: {type: Number, index: false},
+  anon: {type: String, index: true, required: false},
+  minor: {type: String, index: false, required: false},
   versionKey: false,
 });
 
