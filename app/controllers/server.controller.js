@@ -321,8 +321,6 @@ function(callback) {
 			return (callback(err))
 		} else {
 			titles = result;
-			console.log("these are the titles")
-			console.log(result)
 			callback(null, titles);
 		}
 	})

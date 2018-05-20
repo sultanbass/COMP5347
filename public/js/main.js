@@ -151,6 +151,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$('#individualquery').on('click', function(e){
     var data=$('#dropdown').val();
-		$('#articlesummary').load('/userdashboard?title='+data +' #articlesummary')
+		var arr = data.split(" ");
+		$('#articlesummary').load('/userdashboard?title='+arr[0] +' #articlesummary')
 		});
 });

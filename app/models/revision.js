@@ -187,7 +187,11 @@ revSchema.statics.findRevByRegUser= function(userList, callback){
 
 //Get title name of all revisions in db for dropdown
 revSchema.statics.findTitle = function(callback){
-	return this.distinct("title")
+  var pipeline = [
+		{$group: {_id:"$title", count: {$sum:1}}},
+		{$sort: {_id:1}},
+	];
+	return this.aggregate(pipeline)
 	.exec(callback)
 };
 
