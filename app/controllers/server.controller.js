@@ -19,7 +19,6 @@ module.exports.checkWikiAPI = function(req, res){
 	 */
 
 	var title = req.query.title;
-	var date;
 	var numUpdates = 0;
 
 	// Check the latest revision date for the title
@@ -36,7 +35,7 @@ module.exports.checkWikiAPI = function(req, res){
 	}
 
 	// Check wikiAPI and update db if new records exist
-	function checkAPI(){
+	function checkAPI(date){
 		return new Promise(function(resolve, reject){
 			var wikiEndpoint = 'https://en.wikipedia.org/w/api.php';
 			parameters = [ "action=query",
@@ -61,7 +60,7 @@ module.exports.checkWikiAPI = function(req, res){
 					console.log('Status:', res.statusCode);
 				} else {
 					json = JSON.parse(data);
-					pages = json.query.pages
+					pages = json.query.pages;
 					revisions = pages[Object.keys(pages)[0]].revisions;
 					numUpdates = revisions.length;
 					revisions.map(function (obj){
@@ -71,19 +70,14 @@ module.exports.checkWikiAPI = function(req, res){
 					/* TODO
 					 * WARNING: Unable to add fields not in schema (see line 49).
 					 */
-					if (revisions.length > 1){
-						Revision.addRevisions(revisions, function(err, result){
-							if(err){
-								console.log("Error: " + err);
-							}
-							else{
-								console.log("success");
-							}
-						})
-					}
-					else{
-						numUpdates = 0;
-					}
+					Revision.addRevisions(revisions, function(err, result){
+						if(err){
+							console.log("Error: " + err);
+						}
+						else{
+							console.log("Successfully added " + numUpdates + " new revisions to database");
+						}
+					})
 					resolve(numUpdates);
 				}
 			});
@@ -92,17 +86,21 @@ module.exports.checkWikiAPI = function(req, res){
 	}
 
 async function runAsync(){
-	date = await getLatestRevision(title);
-	numUpdates = await checkAPI();
-	console.log("new records " + numUpdates);
-
-	if (numUpdates > 1){
+	var dateString = await getLatestRevision(title);
+	var oldDate = new Date(dateString);
+	var today = new Date();
+	
+	// if latest revision is more than a day old
+	if((today.getTime() - oldDate.getTime()) >  86400000){
+		var newDate = new Date(oldDate);
+		newDate.setDate(newDate.getDate() + 1);
+		numUpdates = await checkAPI(newDate.toISOString());
 		res.send('Added ' + numUpdates + " new \"" + title + "\" revisions to the database");
 	}
-	else {
-		// Status 204 means no content
-		res.status(204).send();
+	else{
+		res.send("0");
 	}
+
 }
 
 runAsync();
