@@ -62,26 +62,29 @@ module.exports.checkWikiAPI = function(req, res){
 					json = JSON.parse(data);
 					pages = json.query.pages;
 					revisions = pages[Object.keys(pages)[0]].revisions;
-					numUpdates = revisions.length;
-					revisions.map(function (obj){
-						obj.title = title;
-					});
-
-					/* TODO
-					 * WARNING: Unable to add fields not in schema (see line 49).
-					 */
-					Revision.addRevisions(revisions, function(err, result){
-						if(err){
-							console.log("Error: " + err);
-						}
-						else{
-							console.log("Successfully added " + numUpdates + " new revisions to database");
-						}
-					})
+					
+					// if there are new revisions
+					if(revisions){
+						numUpdates = revisions.length;
+						
+						// add title to each object
+						revisions.map(function (obj){
+							obj.title = title;
+						});
+						
+						// add new revisions to database
+						Revision.addRevisions(revisions, function(err, result){
+							if(err){
+								console.log("Error: " + err);
+							}
+							else{
+								console.log("Successfully added " + numUpdates + " new revisions to database");
+							}
+						})
+					}
 					resolve(numUpdates);
 				}
 			});
-
 		})
 	}
 
@@ -92,15 +95,13 @@ async function runAsync(){
 	
 	// if latest revision is more than a day old
 	if((today.getTime() - oldDate.getTime()) >  86400000){
+		// add 1 day to avoid duplicate records being fetched
 		var newDate = new Date(oldDate);
 		newDate.setDate(newDate.getDate() + 1);
+		
 		numUpdates = await checkAPI(newDate.toISOString());
-		res.send('Added ' + numUpdates + " new \"" + title + "\" revisions to the database");
 	}
-	else{
-		res.send("0");
-	}
-
+		res.send(numUpdates.toString());
 }
 
 runAsync();
