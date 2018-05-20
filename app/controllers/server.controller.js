@@ -13,10 +13,6 @@ var admin_path = "Admin.txt";
 
 // Check for new revisions and update DB
 module.exports.checkWikiAPI = function(req, res){
-	/*
-	 * TODO
-	 * send the result back in res object
-	 */
 
 	var title = req.query.title;
 	var numUpdates = 0;
