@@ -11,9 +11,11 @@ const revSchema = new mongoose.Schema ({
   parentid: {type: Number, index: false},
   size: {type: Number, index: false},
   anon: {type: String, index: true, required: false},
-  minor: {type: String, index: false, required: false},
-  versionKey: false,
-});
+  minor: {type: String, index: false, required: false}},
+  {
+	  versionKey: false
+  }
+);
 
 // Find the most recent revision for an article
 revSchema.statics.latestRevDate = function (_article,callback) {
