@@ -154,5 +154,11 @@ $(document).ready(function(){
 		var arr = data.split(" |");
 		var titlename = encodeURI(arr[0]);
 		$('#articlesummary').load('/userdashboard?title='+titlename +' #articlesummary')
+
+		$.get('/updateRevisions?title='+titlename,null,function(result) {
+				var revnum = result;
+				alert("MediaWiki Updated!"+"\n"+"There are " +revnum+" new revisions for artilce "+arr[0]);
+		}
+		);
 		});
 });
