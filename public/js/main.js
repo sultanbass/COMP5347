@@ -1,21 +1,8 @@
 window.onload = function(){
-	/*
-	 * TODO
-	 * AJAX query for bar chart data, send as arg to function
-	 */
 
-//	var jqxhrBar = $.get('/distByType', function(response){
-//		jqxhrBar.done(function(response){
-//			data = response.data;
-			//showBarChart('barChart', 0);
-//		});
-//		jqxhrBar.fail(function(jqXHR){
-//	  		console.log("error loading chart");
-//		});
-//	 })
-
-//Default Hide Individaul Analytics section
+	//Default Hide Individaul and Author Analytics sections
 	$('#Individual').hide();
+	$('#Author').hide();
 
 	var jqxhrPie = $.get('/distByType', function(response){
 		jqxhrPie.done(function(response){
@@ -36,7 +23,6 @@ window.onload = function(){
 	  		console.log("error loading chart");
 		});
 	 })
-
 }
 
 // Create the bar chart
@@ -133,6 +119,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$('#IndividualLink').on('click', function(e){
 		$('#Individual').show();
+		$('#Author').hide();
 		$('#Overall').hide();
 		e.preventDefault();
 		});
@@ -142,7 +129,18 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$('#OverallLink').on('click', function(e){
 		$('#Individual').hide();
+		$('#Author').hide();
 		$('#Overall').show();
+		e.preventDefault();
+		});
+});
+
+//ajax request to load author analytics section
+$(document).ready(function(){
+	$('#AuthorLink').on('click', function(e){
+		$('#Individual').hide();
+		$('#Overall').hide();
+		$('#Author').show();
 		e.preventDefault();
 		});
 });

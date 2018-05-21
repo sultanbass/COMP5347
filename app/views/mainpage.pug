@@ -8,6 +8,8 @@ block content
        a(href = "#OverallLink") Overall Analytics
      li#IndividualLink
        a(href = "#IndividualLink") Individual Analytics
+     li#AuthorLink
+       a(href = "#AuthorLink") Author Analytics
      li#navbar 
        a(href='/logout') Log Out
  div(class="container")
@@ -55,8 +57,8 @@ block content
          ol 
           each val in shortestRev
            li= val._id      
-   canvas#barChart   
    canvas#pieChart
+   canvas#barChart
  div#Individual
     p Select article to display individual analytics:
     select#dropdown
@@ -83,3 +85,6 @@ block content
        td Total Revisions 
           each val in top5users
            ol=val.count
+ div#Author
+    p Search author by name:
+    h2 Author Analytics
