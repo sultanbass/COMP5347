@@ -9,7 +9,7 @@ block content
      li#IndividualLink
        a(href = "#IndividualLink") Individual Analytics
      li#AuthorLink
-       a(href = "#AuthorLink") Author Analytics
+       a(href = "#AuthorLink") Author Analytics          
      li#navbar 
        a(href='/logout') Log Out
  div(class="container")
@@ -17,7 +17,7 @@ block content
    p Enter number of Articles:
    input#number(type="text")
    button#button(type='button') Submit
-   h2 Overall Analytics
+   h2 Overall Analytics Summary
    div#results
      table
       tr
@@ -57,34 +57,56 @@ block content
          ol 
           each val in shortestRev
            li= val._id      
+   canvas#barChart   
    canvas#pieChart
-   canvas#barChart
- div#Individual
+  div#Individual
     p Select article to display individual analytics:
     select#dropdown
       each val in titles
         option=val._id +" "+"| Total Revisions: "+val.count 
     button#individualquery(type='button') Search Article      
-    h2 Article Summary
-    table#articlesummary
-     tr
-       td Article Title
-       td 
-        each val in individualarticle
-          =val._id
-     tr
-       td Total Revisions
-       td 
-        each val in individualarticle
-         =val.count
-     tr(colspan=3)
-       td Top 5 Editors
-       td Username
-          each val in top5users
-           ol=val._id
-       td Total Revisions 
-          each val in top5users
-           ol=val.count
- div#Author
-    p Search author by name:
-    h2 Author Analytics
+    h2 Individual Analytics Summary
+    div#individualdetails
+      table#articlesummary
+       tr
+         td Article Title
+         td 
+          each val in individualarticle
+            =val._id
+       tr
+         td Total Revisions
+         td 
+          each val in individualarticle
+           =val.count
+       tr(colspan=3)
+         td Top 5 Editors
+         td Username
+            each val in top5users
+             ol=val._id
+         td Total Revisions 
+            each val in top5users
+             ol=val.count
+  div#Author
+   p Enter author name to display author analytics:
+   input#authorname(type="text")
+   button#authorquery(type='button') Submit
+   h2 Author Analytics Summary
+   div#authordetails
+     table#authorsummary
+        p Articles Edited. Click on each article to see individual timestamp details.
+        th Title/Revisions
+        tr#articlelinks
+          td 
+            each val in authorsummary
+              ol
+               a(href="#articletimestampslink")=val._id +" | "+val.count
+     div#timestampdetails                     
+       table
+         p Timestamp Details
+         th Timestamps
+         tr
+           td
+             ol 
+              each val in timestamps
+               li=val._id
+       

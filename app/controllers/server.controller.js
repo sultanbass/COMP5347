@@ -58,16 +58,16 @@ module.exports.checkWikiAPI = function(req, res){
 					json = JSON.parse(data);
 					pages = json.query.pages;
 					revisions = pages[Object.keys(pages)[0]].revisions;
-					
+
 					// if there are new revisions
 					if(revisions){
 						numUpdates = revisions.length;
-						
+
 						// add title to each object
 						revisions.map(function (obj){
 							obj.title = title;
 						});
-						
+
 						// add new revisions to database
 						Revision.addRevisions(revisions, function(err, result){
 							if(err){
@@ -88,13 +88,13 @@ async function runAsync(){
 	var dateString = await getLatestRevision(title);
 	var oldDate = new Date(dateString);
 	var today = new Date();
-	
+
 	// if latest revision is more than a day old
 	if((today.getTime() - oldDate.getTime()) >  86400000){
 		// add 1 day to avoid duplicate records being fetched
 		var newDate = new Date(oldDate);
 		newDate.setDate(newDate.getDate() + 1);
-		
+
 		numUpdates = await checkAPI(newDate.toISOString());
 	}
 		res.send(numUpdates.toString());
@@ -199,14 +199,16 @@ module.exports.logout = function(req, res) {
 
 module.exports.mainpage = function(req, res) {
 var number = parseInt(req.query.number);
-if (number <0) {
-	alert("Number has to be greater than 0");
+if (number <=0) {
+	number = 3;
 }
-if (isNaN(number)) {
+if ((isNaN(number)) || (number == null)) {
 	number = 3
 }
 
 var title = req.query.title
+var author = req.query.author
+var article = req.query.article
 
 async.series([
 
@@ -347,7 +349,32 @@ function(callback) {
 		}
 	})
 },
+function(callback) {
+	Revision.findAuthorRev(author, function(err, result) {
+		if (err) {
+			console.log("Error finding author edits");
+			console.log(err);
+			return (callback(err))
+		} else {
+		  authorsummary = result;
+			callback(null, authorsummary);
+		}
+	})
+},
 
+function(callback) {
+	Revision.findAuthorRevTimestamps(author, article, function(err, result) {
+		if (err) {
+			console.log("Error finding author edits");
+			console.log(err);
+			return (callback(err))
+		} else {
+		  timestamps = result;
+			console.log(result);
+			callback(null, timestamps);
+		}
+	})
+},
 ],function(err) {
 	res.render("mainpage.pug", {number:number})
 })
@@ -365,7 +392,7 @@ module.exports.revByYearType = function(req, res){
 					console.log("Read admin.txt error!")
 				} else {
 					admins = data.toString().split("\n");
-					console.log("Reading admin")
+					//console.log("Reading admin")
 					callback(null, admins)
 
 				}
@@ -380,7 +407,7 @@ module.exports.revByYearType = function(req, res){
 					console.log("Read bot.txt error!")
 				} else {
 					bots = data.toString().split("\n");
-					console.log("Reading bots")
+					//console.log("Reading bots")
 					callback(null, bots)
 
 				}
@@ -393,8 +420,8 @@ module.exports.revByYearType = function(req, res){
 					console.log("Cannot find year_bot");
 					return (callback(err))
 				} else {
-					console.log("Year for bots")
-					console.log(result)
+					//console.log("Year for bots")
+					//console.log(result)
 					year_bot = result;
 					callback(null, year_bot)
 				}
@@ -407,8 +434,8 @@ module.exports.revByYearType = function(req, res){
 					console.log("Cannot find year_admin");
 					return (callback(err))
 				} else {
-					console.log("Year for admins")
-					console.log(result)
+					//console.log("Year for admins")
+					//console.log(result)
 					year_admin = result;
 					callback(null, year_admin)
 				}
@@ -421,8 +448,8 @@ module.exports.revByYearType = function(req, res){
 						console.log("Cannot find Regular User");
 						return (callback(err))
 					} else {
-						console.log("Year Regular users")
-						console.log(result)
+						//console.log("Year Regular users")
+						//console.log(result)
 						regUser = result;
 						callback(null, regUser)
 					}
@@ -435,8 +462,8 @@ module.exports.revByYearType = function(req, res){
 					console.log("Cannot find year_anon");
 					return (callback(err))
 				} else {
-					console.log("Year anonymous")
-					console.log(result)
+					//console.log("Year anonymous")
+					//console.log(result)
 					year_anon = result;
 					callback(null, year_anon)
 				}

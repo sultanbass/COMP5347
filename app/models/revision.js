@@ -217,6 +217,28 @@ revSchema.statics.findTop5Users= function(title, admins, bots, callback){
 	.exec(callback)
 };
 
+//find all articles edited by particular users
+revSchema.statics.findAuthorRev= function(author, callback){
+	var pipeline = [
+		{$match: {user: author}},
+		{$group: {_id:"$title", count:{$sum:1}}},
+		{$sort: {_id:1}},
+	];
+	return this.aggregate(pipeline)
+	.exec(callback)
+};
+
+//find all timestamps for one article edited by particular user
+revSchema.statics.findAuthorRevTimestamps= function(author, article, callback){
+	var pipeline = [
+    {$match: {user: author}},
+		{$match: {'title': article}},
+		{$group: {_id:"$timestamp", count:{$sum:1}}},
+		{$sort: {_id:1}},
+	];
+	return this.aggregate(pipeline)
+	.exec(callback)
+};
 var Revision = mongoose.model('Revision', revSchema, 'revisions')
 
 //Export the model Revision Schema

@@ -2,7 +2,11 @@ window.onload = function(){
 
 	//Default Hide Individaul and Author Analytics sections
 	$('#Individual').hide();
-	$('#Author').hide();
+  $('#Author').hide();
+	$('#timestampdetails').hide();
+	$('#authordetails').hide();
+  $('#individualdetails').hide();
+
 
 	var jqxhrPie = $.get('/distByType', function(response){
 		jqxhrPie.done(function(response){
@@ -111,7 +115,12 @@ function showPieChart(element, data) {
 $(document).ready(function(){
 	$('#button').on('click', function(e){
     var data=$('#number').val();
-		$('#results').load('/userdashboard?number='+data +' #results')
+			if ((data == "") || (data <= 0) || (isNaN(data)))  {
+				alert("Please enter a number greater than 0");
+			}
+			else {
+			$('#results').load('/userdashboard?number='+data +' #results')
+		  }
 		});
 });
 
@@ -158,6 +167,36 @@ $(document).ready(function(){
 			if (result !== "0"){
 				alert("MediaWiki database records updated"+"\n"+ revnum+" new revisions for \""+arr[0] + "\" have been added.");
 			}
+			$('#individualdetails').show();
 		});
 	});
+});
+
+//ajax request to load author analytics summary
+$(document).ready(function(){
+	$('#authorquery').on('click', function(e){
+    var data=$("#authorname").val();
+			if (data == ""){
+				alert("Please enter a valid user")
+			}
+			else {
+			var authorname = encodeURI(data);
+			$('#articlelinks').load('/userdashboard?author='+authorname +' #articlelinks')
+			$('#authordetails').show();
+			$('#timestampdetails').hide();
+		  }
+		});
+});
+
+//ajax request to load author articel timestamps
+$(document).ready(function(){
+	$("#authorsummary tbody").on('click','ol', function(e){
+    var data = $(this).text();
+		var arr = data.split(" |");
+		var article = encodeURI(arr[0]);
+		$('#timestampdetails').show();
+	  var data2=$("#authorname").val();
+		var authorname = encodeURI(data2);
+		$('#timestampdetails').load('/userdashboard?article='+article+'&author='+authorname +' #timestampdetails')
+		});
 });
