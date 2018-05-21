@@ -61,7 +61,7 @@ block content
     p Select article to display individual analytics:
     select#dropdown
       each val in titles
-        option=val._id +" "+"(Total Revisions: "+val.count+")" 
+        option=val._id +" "+"| Total Revisions: "+val.count 
     button#individualquery(type='button') Search Article      
     h2 Article Summary
     table#articlesummary
