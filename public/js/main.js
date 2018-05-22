@@ -157,7 +157,8 @@ $(document).ready(function(){
 //ajax request to load individual article summary
 $(document).ready(function(){
 	$('#individualquery').on('click', function(e){
-    var data=$('#dropdown').val();
+		$('#individualquery').prop('disabled', true);
+		var data=$('#dropdown').val();
 		var arr = data.split(" |");
 		var titlename = encodeURI(arr[0]);
 		$('#articlesummary').load('/userdashboard?title='+titlename +' #articlesummary')
@@ -167,6 +168,7 @@ $(document).ready(function(){
 			if (result !== "0"){
 				alert("MediaWiki database records updated"+"\n"+ revnum+" new revisions for \""+arr[0] + "\" have been added.");
 			}
+			$('#individualquery').prop('disabled', false);
 			$('#individualdetails').show();
 		});
 	});
