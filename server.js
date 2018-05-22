@@ -25,6 +25,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//User Session Middleware
+app.use(session({
+  secret: 'ssshhhh',
+  cookie:{maxAge:600000},
+  resave: true,
+  saveUninitialized: true
+}));
+
 // Register passport middleware
 require('./config/passport')(passport);
 app.use(passport.initialize());
@@ -58,14 +66,6 @@ app.use(expressValidator({
       value : value
     };
   }
-}));
-
-// User Session Middleware
-app.use(session({
-  secret: 'ssshhhh',
-  cookie:{maxAge:600000},
-  resave: true,
-  saveUninitialized: true
 }));
 
 //routing

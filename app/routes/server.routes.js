@@ -6,7 +6,7 @@ var router = express.Router();
 router.get('/', controller.landingpage);
 router.get('/register', controller.register);
 router.get('/logout', controller.logout);
-router.get('/userdashboard', /*ensureAuthenticated,*/ controller.mainpage);
+router.get('/userdashboard', ensureAuthenticated, controller.mainpage);
 router.get('/updateRevisions', controller.checkWikiAPI);
 
 // Ajax requests
