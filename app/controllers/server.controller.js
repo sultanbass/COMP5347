@@ -85,22 +85,33 @@ module.exports.checkWikiAPI = function(req, res){
 	}
 
 async function runAsync(){
-	var dateString = await getLatestRevision(title);
-	var oldDate = new Date(dateString);
-	var today = new Date();
-
-	// if latest revision is more than a day old
-	if((today.getTime() - oldDate.getTime()) >  86400000){
-		// add 1 day to avoid duplicate records being fetched
-		var newDate = new Date(oldDate);
-		newDate.setDate(newDate.getDate() + 1);
-
-		numUpdates = await checkAPI(newDate.toISOString());
-	}
-		res.send(numUpdates.toString());
+	
+	var totalUpdates = 0;
+	
+	// Loop through the API's max 500 results per request.
+	do{
+		var numUpdated = 0;
+		var dateString = await getLatestRevision(title);
+		var oldDate = new Date(dateString);
+		var today = new Date();
+	
+		// if latest revision is more than a day old
+		if((today.getTime() - oldDate.getTime()) >  86400000){
+			// add 1 day to avoid duplicate records being fetched
+			var newDate = new Date(oldDate);
+			newDate.setDate(newDate.getDate() + 1);
+	
+			numUpdated = await checkAPI(newDate.toISOString());
+			totalUpdates += numUpdated;
+		}
+	} while (numUpdated == 500);
+	
+	// Send the results back
+	res.send(totalUpdates.toString());
 }
 
-runAsync();
+
+runAsync().catch("Error updating database!");
 
 }
 
@@ -183,12 +194,12 @@ module.exports.login = function(req, res, next){
 		});
 	}
 	else{
-			passport.authenticate('local', {
-				successRedirect:'/userdashboard',
-				failureRedirect:'/',
-				failureFlash: true
-			})(req, res, next);
-		}
+		passport.authenticate('local', {
+			successRedirect:'/userdashboard',
+			failureRedirect:'/',
+			failureFlash: true
+		})(req, res, next);
+	}
 };
 //Logout Process
 module.exports.logout = function(req, res) {
@@ -487,8 +498,8 @@ module.exports.revByYearType = function(req, res){
 				label: 'Regular User',
 				data: [9, 2, 2, 9, 6, 16]
 			}];
-			console.log("hello")
-			console.log(datasets);
+			//console.log("hello")
+			//console.log(datasets);
 			res.send({data:datasets});
 			callback(null, datasets)
 		}
@@ -647,7 +658,7 @@ module.exports.distByType = function(req, res){
     			revisions: sumAnon
     		}];
 
-			console.log(data);
+			//console.log(data);
 			res.send({data:data});
 			callback(null, data)
 		}
