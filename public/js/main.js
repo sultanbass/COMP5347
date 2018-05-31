@@ -1,13 +1,23 @@
 window.onload = function(){
 
-	//Default Hide Individaul and Author Analytics sections
+	// Default Hide Individaul and Author Analytics sections
 	$('#Individual').hide();
-  $('#Author').hide();
+	$('#Author').hide();
 	$('#timestampdetails').hide();
 	$('#authordetails').hide();
-  $('#individualdetails').hide();
+	$('#individualdetails').hide();
 
+	// Event liteners for hyperlinks to show relevant sections
+	$('#IndividualLink').bind('click', showIndividualAnalytics);
+	$('#OverallLink').bind('click', showOverallAnalytics);
+	$('#AuthorLink').bind('click', showAuthorAnalytics);
 
+	// Event liteners for buttons to process and display analytics
+	$('#button').bind("click", loadOverallAnalytics);
+	$('#individualquery').bind('click', loadIndividualAnalytics);
+	$('#authorquery').bind('click', loadAuthorAnalytics);
+	
+	
 	var jqxhrPie = $.get('/distByType', function(response){
 		jqxhrPie.done(function(response){
 			data = response.data;
@@ -112,98 +122,84 @@ function showPieChart(element, data) {
 }
 
 //ajax request to reload list of revisions
-$(document).ready(function(){
-	$('#button').on('click', function(e){
-    var data=$('#number').val();
-			if ((data == "") || (data <= 0) || (isNaN(data)))  {
-				alert("Please enter a number greater than 0");
-			}
-			else {
-			$('#results').load('/userdashboard?number='+data +' #results')
-		  }
-		});
-});
+function loadOverallAnalytics(){
+	var data=$('#number').val();
+		if ((data == "") || (data <= 0) || (isNaN(data)))  {
+			alert("Please enter a number greater than 0");
+		}
+		else {
+		$('#results').load('/userdashboard?number='+data +' #results')
+	  }
+}
 
-//ajax request to load individual analytics section
-$(document).ready(function(){
-	$('#IndividualLink').on('click', function(e){
-		$('#Individual').show();
-		$('#Author').hide();
-		$('#Overall').hide();
-		e.preventDefault();
-		});
-});
 
-//ajax request to load overall analytics section
-$(document).ready(function(){
-	$('#OverallLink').on('click', function(e){
-		$('#Individual').hide();
-		$('#Author').hide();
-		$('#Overall').show();
-		e.preventDefault();
-		});
-});
+// show individual analytics section
+function showIndividualAnalytics(){
+	$('#Individual').show();
+	$('#Author').hide();
+	$('#Overall').hide();
+}
 
-//ajax request to load author analytics section
-$(document).ready(function(){
-	$('#AuthorLink').on('click', function(e){
-		$('#Individual').hide();
-		$('#Overall').hide();
-		$('#Author').show();
-		e.preventDefault();
-		});
-});
+// show overall analytics section
+function showOverallAnalytics(){
+	$('#Individual').hide();
+	$('#Author').hide();
+	$('#Overall').show();
+}
+
+// show author analytics section
+function showAuthorAnalytics(){
+	$('#Individual').hide();
+	$('#Overall').hide();
+	$('#Author').show();
+}
 
 //ajax request to load individual article summary
-$(document).ready(function(){
-	$('#individualquery').on('click', function(e){
-		$('#individualquery').prop('disabled', true);
-		var data=$('#dropdown').val();
-		var arr = data.split(" |");
-		var titlename = encodeURI(arr[0]);
+function loadIndividualAnalytics(){
+	$('#individualquery').prop('disabled', true);
+	var data=$('#dropdown').val();
+	var arr = data.split(" |");
+	var titlename = encodeURI(arr[0]);
 
-		$.get('/updateRevisions?title='+titlename,null,function(result) {
-			var revnum = result;
-			if (result !== "0"){
-				alert("MediaWiki database records updated"+"\n"+ revnum+" new revisions for \""+arr[0] + "\" have been added.");
+	$.get('/updateRevisions?title='+titlename,null,function(result) {
+		var revnum = result;
+		if (result !== "0"){
+			alert("MediaWiki database records updated"+"\n"+ revnum+" new revisions for \""+arr[0] + "\" have been added.");
+		}
+		else {
+			  alert("No new revisions to update")
+				$('#individualquery').prop('disabled', false);
 			}
-			else {
-				  alert("No new revisions to update")
-					$('#individualquery').prop('disabled', false);
-				}
-			$('#articlesummary').load('/userdashboard?title='+titlename +' #articlesummary ');
-			$('#dropdowndiv').load('/userdashboard?title='+titlename +' #dropdowndiv ');
-			$('#individualquery').prop('disabled', false);
-			$('#individualdetails').show();
-		});
+		$('#articlesummary').load('/userdashboard?title='+titlename +' #articlesummary ');
+		$('#dropdowndiv').load('/userdashboard?title='+titlename +' #dropdowndiv ');
+		$('#individualquery').prop('disabled', false);
+		$('#individualdetails').show();
 	});
-});
+}
 
 //ajax request to load author analytics summary
-$(document).ready(function(){
-	$('#authorquery').on('click', function(e){
-    var data=$("#authorname").val();
-			if (data == ""){
-				alert("Please enter a valid user")
-			}
-			else {
+function loadAuthorAnalytics(){
+	var data=$("#authorname").val();
+		if (data == ""){
+			alert("Please enter a valid user")
+		}
+		else {
 			var authorname = encodeURI(data);
 			$('#articlelinks').load('/userdashboard?author='+authorname +' #articlelinks')
 			$('#authordetails').show();
 			$('#timestampdetails').hide();
-		  }
-		});
-});
+		}
+}
 
-//ajax request to load author articel timestamps
+//ajax request to load author article timestamps
 $(document).ready(function(){
 	$("#authorsummary tbody").on('click','ol', function(e){
-    var data = $(this).text();
+		var data = $(this).text();
 		var arr = data.split(" |");
-		var article = encodeURI(arr[0]);
-		$('#timestampdetails').show();
-	  var data2=$("#authorname").val();
+		var article = encodeURI(arr[0]);	
+		var data2=$("#authorname").val();
 		var authorname = encodeURI(data2);
-		$('#timestampdetails').load('/userdashboard?article='+article+'&author='+authorname +' #timestampdetails')
-		});
+		$('#timestampdetails').load('/userdashboard?article='+article+'&author='+authorname +' #timestampdetails');
+		$('#timestampdetails').show();
+	});
 });
