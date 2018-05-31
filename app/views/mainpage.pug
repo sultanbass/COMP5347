@@ -61,9 +61,10 @@ block content
    canvas#pieChart
   div#Individual
     p Select article to display individual analytics:
-    select#dropdown
-      each val in titles
-        option=val._id +" "+"| Total Revisions: "+val.count 
+    div#dropdowndiv
+      select#dropdown
+        each val in titles
+          option=val._id +" "+"| Total Revisions: "+val.count 
     button#individualquery(type='button') Search Article      
     h2 Individual Analytics Summary
     div#individualdetails

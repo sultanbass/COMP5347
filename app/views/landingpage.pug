@@ -2,18 +2,45 @@ extends layout
 
 block content
  div
-  h1 WIKI-ANALYTICS
+  h1 WIKILATIC
+  h2 Your very own Wiki data analytics website
   hr
   br
- div(class="loginBar")
-  h1.display-4.m-b-2 Log In
-  form(method='POST' action='/login') 
-   div(class="container")
-    label(for='username') Username 
-    input.form-control(type='text' id='username' placeholder='username' name='username')
+ table#mainTable 
+  tr
+   td 
+    div#loginBar
+     h1.display-4.m-b-2 Log In
+     form(method='POST' action='/login')
+      div(class="container")
+       label(for='username') Username 
+       input.form-control(type='text' id='username' placeholder='username' name='username')
     
-    label(for='password') Password  
-    input.form-control(type='password' id='password' placeholder='password' name='password') 
+       label(for='password') Password  
+       input.form-control(type='password' id='password' placeholder='password' name='password') 
      
-    button.btn.btn-primary(type='submit') Log in 
-    a(href='/register') Sign up
+       button.btn.btn-primary(type='submit' value = 'login') Log in
+   td
+    div#Chart
+     h1.display-4.m-b-2 About us
+      canvas#pieChart
+   td 
+    div#signUp
+     h1.display-4.m-b-2 Register here
+     form(method='POST' action='/register')
+      div(class="container")
+       label(for='first_name') First Name  
+       input.form-control(type='text' id='first_name' placeholder='first_name' name='first_name')
+     
+       label(for='last_name') Last Name  
+       input.form-control(type='text' id='last_name' placeholder='last_name' name='last_name')
+     
+       label(for='email') Email
+       input.form-control(type='text' id='email' placeholder='email' name='email')
+    
+       label(for='username') Username  
+       input.form-control(type='text' id='username' placeholder='username' name='username')
+     
+       label(for='password') Password  
+       input.form-control(type='password' id='password' placeholder='password' name='password')
+       button.btn.btn-primary(type='submit' value = 'signup') Sign Up 

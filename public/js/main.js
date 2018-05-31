@@ -161,8 +161,6 @@ $(document).ready(function(){
 		var data=$('#dropdown').val();
 		var arr = data.split(" |");
 		var titlename = encodeURI(arr[0]);
-		$('#articlesummary').load('/userdashboard?title='+titlename +' #articlesummary ');
-		$('#dropdown').load('/userdashboard?title='+titlename +' #dropdown ');
 
 		$.get('/updateRevisions?title='+titlename,null,function(result) {
 			var revnum = result;
@@ -170,8 +168,11 @@ $(document).ready(function(){
 				alert("MediaWiki database records updated"+"\n"+ revnum+" new revisions for \""+arr[0] + "\" have been added.");
 			}
 			else {
+				  alert("No new revisions to update")
 					$('#individualquery').prop('disabled', false);
 				}
+			$('#articlesummary').load('/userdashboard?title='+titlename +' #articlesummary ');
+			$('#dropdowndiv').load('/userdashboard?title='+titlename +' #dropdowndiv ');
 			$('#individualquery').prop('disabled', false);
 			$('#individualdetails').show();
 		});

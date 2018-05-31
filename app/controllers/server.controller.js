@@ -52,7 +52,6 @@ module.exports.checkWikiAPI = function(req, res){
 							"rvlimit=max",
 							"rvprop=timestamp|size|user|ids|flags|sha1|parsedcomment"]
 			var url = wikiEndpoint + "?" + parameters.join("&");
-			//console.log("url:" + url)
 			var options = {
 				url:url,
 				Accept: 'application/json',
@@ -152,7 +151,7 @@ module.exports.signup = function(req, res){
 	//check if there are any validation errors
 	var errors = req.validationErrors();
 	if(errors){
-		res.render('signup', {
+		res.render('landingpage', {
 			errors:errors
 		});
 	} else {
@@ -412,7 +411,6 @@ module.exports.revByYearType = function(req, res){
 					console.log("Read admin.txt error!")
 				} else {
 					admins = data.toString().split("\n");
-					//console.log("Reading admin")
 					callback(null, admins)
 
 				}
@@ -427,7 +425,6 @@ module.exports.revByYearType = function(req, res){
 					console.log("Read bot.txt error!")
 				} else {
 					bots = data.toString().split("\n");
-					//console.log("Reading bots")
 					callback(null, bots)
 
 				}
@@ -440,8 +437,6 @@ module.exports.revByYearType = function(req, res){
 					console.log("Cannot find year_bot");
 					return (callback(err))
 				} else {
-					//console.log("Year for bots")
-					//console.log(result)
 					year_bot = result;
 					callback(null, year_bot)
 				}
@@ -454,8 +449,6 @@ module.exports.revByYearType = function(req, res){
 					console.log("Cannot find year_admin");
 					return (callback(err))
 				} else {
-					//console.log("Year for admins")
-					//console.log(result)
 					year_admin = result;
 					callback(null, year_admin)
 				}
@@ -468,8 +461,6 @@ module.exports.revByYearType = function(req, res){
 						console.log("Cannot find Regular User");
 						return (callback(err))
 					} else {
-						//console.log("Year Regular users")
-						//console.log(result)
 						regUser = result;
 						callback(null, regUser)
 					}
@@ -482,8 +473,6 @@ module.exports.revByYearType = function(req, res){
 					console.log("Cannot find year_anon");
 					return (callback(err))
 				} else {
-					//console.log("Year anonymous")
-					//console.log(result)
 					year_anon = result;
 					callback(null, year_anon)
 				}
@@ -507,41 +496,11 @@ module.exports.revByYearType = function(req, res){
 				label: 'Regular User',
 				data: [9, 2, 2, 9, 6, 16]
 			}];
-			//console.log("hello")
-			//console.log(datasets);
 			res.send({data:datasets});
 			callback(null, datasets)
 		}
 	],)
 }
-
-
-//	TESTING CODE
-//
-//	function readDB(callback){
-//
-//		var dataset = [];
-//
-//		// bot edits
-//		Revision.findRevByYearUser(bots, function(err, result){
-//			newData.push(result);
-//	        if (err) return callback(err)
-//	        callback(null, content)
-//		});
-//
-//		// admin edits
-//		Revision.findRevByYearUser(admins, function(err, result){
-//	        if (err) return callback(err)
-//	        dataset.push(result);
-//		});
-//
-//		callback(null, dataset);
-//	}
-//	readDB(function(err, content){
-//		console.log("test");
-//		console.log(content);
-//	});
-//
 
 
 // Overall analytics pie chart - number of revisions by user type
@@ -580,8 +539,6 @@ module.exports.distByType = function(req, res){
 					console.log("Cannot find year_bot");
 					return (callback(err))
 				} else {
-//					console.log("This is for bots")
-//					console.log(result)
 					year_bot = result;
 					callback(null, year_bot)
 				}
@@ -594,8 +551,6 @@ module.exports.distByType = function(req, res){
 					console.log("Cannot find year_admin");
 					return (callback(err))
 				} else {
-//					console.log("This is for admins")
-//					console.log(result)
 					year_admin = result;
 					callback(null, year_admin)
 				}
@@ -608,8 +563,6 @@ module.exports.distByType = function(req, res){
 						console.log("Cannot find Regular User");
 						return (callback(err))
 					} else {
-//						console.log("This is Regular users")
-//						console.log(result)
 						regUser = result;
 						callback(null, regUser)
 					}
@@ -667,7 +620,6 @@ module.exports.distByType = function(req, res){
     			revisions: sumAnon
     		}];
 
-			//console.log(data);
 			res.send({data:data});
 			callback(null, data)
 		}
