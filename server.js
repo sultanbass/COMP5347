@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //User Session Middleware
 app.use(session({
   secret: 'ssshhhh',
-  cookie:{maxAge:600000},
+  cookie:{maxAge:3600000},
   resave: true,
   saveUninitialized: true
 }));
