@@ -10,6 +10,15 @@ var async = require('async');
 var bot_path = "Bot.txt";
 var admin_path = "Admin.txt";
 
+// Access Control
+module.exports.ensureAuthenticated = function(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  } else {
+    req.flash('danger', 'Please login');
+    res.redirect('/');
+  }
+}
 
 // Check for new revisions and update DB
 module.exports.checkWikiAPI = function(req, res){
@@ -85,27 +94,27 @@ module.exports.checkWikiAPI = function(req, res){
 	}
 
 async function runAsync(){
-	
+
 	var totalUpdates = 0;
-	
+
 	// Loop through the API's max 500 results per request.
 	do{
 		var numUpdated = 0;
 		var dateString = await getLatestRevision(title);
 		var oldDate = new Date(dateString);
 		var today = new Date();
-	
+
 		// if latest revision is more than a day old
 		if((today.getTime() - oldDate.getTime()) >  86400000){
 			// add 1 day to avoid duplicate records being fetched
 			var newDate = new Date(oldDate);
 			newDate.setDate(newDate.getDate() + 1);
-	
+
 			numUpdated = await checkAPI(newDate.toISOString());
 			totalUpdates += numUpdated;
 		}
 	} while (numUpdated == 500);
-	
+
 	// Send the results back
 	res.send(totalUpdates.toString());
 }

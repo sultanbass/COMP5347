@@ -6,7 +6,7 @@ var router = express.Router();
 router.get('/', controller.landingpage);
 router.get('/register', controller.register);
 router.get('/logout', controller.logout);
-router.get('/userdashboard', ensureAuthenticated, controller.mainpage);
+router.get('/userdashboard', controller.ensureAuthenticated, controller.mainpage);
 router.get('/updateRevisions', controller.checkWikiAPI);
 
 // Ajax requests
@@ -15,19 +15,11 @@ router.get('/distByType', controller.distByType);
 
 
 // Post request routes
-router.post('/login', controller.login);
+router.post('/login/', controller.login);
 router.post('/register', controller.signup);
 router.post('/userdashboard', controller.mainpage)
 
-// Access Control
-function ensureAuthenticated(req, res, next){
-  if(req.isAuthenticated()){
-    return next();
-  } else {
-    req.flash('danger', 'Please login');
-    res.redirect('/');
-  }
-}
+
 
 // Allows other files to include the router
 module.exports = router;

@@ -161,13 +161,17 @@ $(document).ready(function(){
 		var data=$('#dropdown').val();
 		var arr = data.split(" |");
 		var titlename = encodeURI(arr[0]);
-		$('#articlesummary').load('/userdashboard?title='+titlename +' #articlesummary')
+		$('#articlesummary').load('/userdashboard?title='+titlename +' #articlesummary ');
+		$('#dropdown').load('/userdashboard?title='+titlename +' #dropdown ');
 
 		$.get('/updateRevisions?title='+titlename,null,function(result) {
 			var revnum = result;
 			if (result !== "0"){
 				alert("MediaWiki database records updated"+"\n"+ revnum+" new revisions for \""+arr[0] + "\" have been added.");
 			}
+			else {
+					$('#individualquery').prop('disabled', false);
+				}
 			$('#individualquery').prop('disabled', false);
 			$('#individualdetails').show();
 		});
