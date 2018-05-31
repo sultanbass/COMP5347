@@ -92,7 +92,7 @@ revSchema.statics.findLeastUserEdits= function(admins, bots, callback){
 //find atop 3 article with the longest history
 revSchema.statics.findLongRev= function(callback){
 	var pipeline = [
-		{$group:{_id:"$title", timestamp:{$last:"$timestamp"}}},
+		{$group:{_id:"$title", timestamp:{$min:"$timestamp"}}},
 		{$sort:{timestamp:1}},
 		{$limit:3}
 	];
@@ -103,7 +103,7 @@ revSchema.statics.findLongRev= function(callback){
 //Find top 3 articles with the shortest history
 revSchema.statics.findShortRev= function(callback){
 	var pipeline = [
-		{$group:{_id:"$title", timestamp:{$last:"$timestamp"}}},
+		{$group:{_id:"$title", timestamp:{$min:"$timestamp"}}},
 		{$sort:{timestamp:-1}},
 		{$limit:3}
 	];
