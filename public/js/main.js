@@ -16,8 +16,8 @@ window.onload = function(){
 	$('#button').bind("click", loadOverallAnalytics);
 	$('#individualquery').bind('click', loadIndividualAnalytics);
 	$('#authorquery').bind('click', loadAuthorAnalytics);
-	
-	
+
+
 	var jqxhrPie = $.get('/distByType', function(response){
 		jqxhrPie.done(function(response){
 			data = response.data;
@@ -124,8 +124,14 @@ function showPieChart(element, data) {
 //ajax request to reload list of revisions
 function loadOverallAnalytics(){
 	var data=$('#number').val();
+	var r = $("#num").text();
+	var arr = r.split(" ");
+	(arr[1])
 		if ((data == "") || (data <= 0) || (isNaN(data)))  {
 			alert("Please enter a number greater than 0");
+		}
+		else if (data == arr[1]) {
+			alert("Top " +data+" articles already displayed")
 		}
 		else {
 		$('#results').load('/userdashboard?number='+data +' #results')
@@ -196,7 +202,7 @@ $(document).ready(function(){
 	$("#authorsummary tbody").on('click','ol', function(e){
 		var data = $(this).text();
 		var arr = data.split(" |");
-		var article = encodeURI(arr[0]);	
+		var article = encodeURI(arr[0]);
 		var data2=$("#authorname").val();
 		var authorname = encodeURI(data2);
 		$('#timestampdetails').load('/userdashboard?article='+article+'&author='+authorname +' #timestampdetails');
