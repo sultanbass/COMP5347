@@ -1,7 +1,8 @@
 extends layout
 
 block content
- h1 Hi there. Welcome  !
+ h1 WIKILATIC
+ h2 Welcome User!
  nav#navbar
    ul#navbar
      li#OverallLink
@@ -14,7 +15,7 @@ block content
        a(href='/logout') Log Out
  div(class="container")
   div#Overall
-   p Enter number of Articles:
+   p Enter number of 'top articles to display':
    input#number(type="text")
    button#button(type='button') Submit
    h2 Overall Analytics Summary
@@ -94,7 +95,8 @@ block content
    h2 Author Analytics Summary
    div#authordetails
      table#authorsummary
-        p Articles Edited. Click on each article to see individual timestamp details.
+        p Articles Edited (if author name does not exist no articles will be shown) : 
+        p Click on each article to see individual timestamp details
         th Title/Revisions
         tr#articlelinks
           td 

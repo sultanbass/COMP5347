@@ -127,9 +127,6 @@ module.exports.landingpage = function(req, res){
 	res.render('landingpage');
 };
 
-module.exports.register = function(req, res){
-	res.render('signup');
-};
 
 
 //Registration process
@@ -375,7 +372,7 @@ function(callback) {
 			console.log(err);
 			return (callback(err))
 		} else {
-		  authorsummary = result;
+		  authorsummary = result
 			callback(null, authorsummary);
 		}
 	})
@@ -389,7 +386,6 @@ function(callback) {
 			return (callback(err))
 		} else {
 		  timestamps = result;
-			console.log(result);
 			callback(null, timestamps);
 		}
 	})

@@ -4,13 +4,14 @@ block content
  div
   h1 WIKILATIC
   h2 Your very own Wiki data analytics website
+  p This website provides analtics for wikipedia articles. Log In or Register now to view insights!
   hr
   br
  table#mainTable 
   tr
    td 
     div#loginBar
-     h1.display-4.m-b-2 Log In
+     h2.display-4.m-b-2 Log In
      form(method='POST' action='/login')
       div(class="container")
        label(for='username') Username 
@@ -20,13 +21,9 @@ block content
        input.form-control(type='password' id='password' placeholder='password' name='password') 
      
        button.btn.btn-primary(type='submit' value = 'login') Log in
-   td
-    div#Chart
-     h1.display-4.m-b-2 About us
-      canvas#pieChart
    td 
     div#signUp
-     h1.display-4.m-b-2 Register here
+     h2.display-4.m-b-2 Register here
      form(method='POST' action='/register')
       div(class="container")
        label(for='first_name') First Name  
@@ -43,4 +40,9 @@ block content
      
        label(for='password') Password  
        input.form-control(type='password' id='password' placeholder='password' name='password')
-       button.btn.btn-primary(type='submit' value = 'signup') Sign Up 
+       button.btn.btn-primary(type='submit' value = 'signup') Sign Up
+  div#Chart
+   h2.display-4.m-b-2 Features
+   p Sample pie chart showing overall distribution of users:
+   br
+   canvas#pieChart     
